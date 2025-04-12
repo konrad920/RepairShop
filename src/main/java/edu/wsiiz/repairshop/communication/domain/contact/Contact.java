@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
+@EqualsAndHashCode(of = "id")
 public class Contact {
 
   @Id
+  @GeneratedValue
   Long id;
 
   Long customerId;
@@ -28,7 +31,7 @@ public class Contact {
 
   String note;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "contact_id")
   List<ContactItem> items;
 }
