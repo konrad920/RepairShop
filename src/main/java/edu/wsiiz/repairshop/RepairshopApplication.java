@@ -10,4 +10,5 @@ public class RepairshopApplication {
 		SpringApplication.run(RepairshopApplication.class, args);
 	}
 
+	
 }
