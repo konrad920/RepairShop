@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class ContactController {
 
   final ContactRepository repository;
+  final ContactService service;
 
   @PostMapping
   public ResponseEntity<Contact> addNew(@RequestBody Contact contact) {
 
-    val saved = repository.save(contact);
+    val created = service.add(contact);
 
-    return ResponseEntity.created(URI.create("")).body(saved);
+    return ResponseEntity.created(URI.create("")).body(created);
   }
 
   @GetMapping("/global")
@@ -64,7 +65,7 @@ public class ContactController {
       return ResponseEntity.notFound().build();
     }
 
-    repository.delete(existing.get());
+    service.remove(existing.get());
 
     return ResponseEntity.noContent().build();
   }
