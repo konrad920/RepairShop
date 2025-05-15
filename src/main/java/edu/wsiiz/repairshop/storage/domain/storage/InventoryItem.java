@@ -2,30 +2,33 @@ package edu.wsiiz.repairshop.storage.domain.storage;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @EqualsAndHashCode(of = "id")
+@Getter
+@Setter
 public class InventoryItem {
     @Id
-    @GeneratedValue
-    Long id;
-    String name;
-    Long netPrice;
-    LocalDate manufacturingDate;
-    LocalDate expirationDate;
-    LocalDate deliveryDate;
-    int count;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private Long netPrice;
+    private LocalDate manufacturingDate;
+    private LocalDate expirationDate;
+    private int count;
 
     @Enumerated(EnumType.STRING)
-    Manufacturer manufacturer;
+    private Manufacturer manufacturer;
 
     @ManyToOne
     @JoinColumn(name = "storage_id")
-    Storage storage;
+    private Storage storage;
 
-    @OneToMany(mappedBy = "inventoryItem", cascade = CascadeType.ALL)
-    List<Delivery> deliveries;
+    @ManyToOne
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
 }
