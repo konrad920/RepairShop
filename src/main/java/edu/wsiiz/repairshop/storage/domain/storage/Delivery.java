@@ -2,20 +2,19 @@ package edu.wsiiz.repairshop.storage.domain.storage;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
-
-import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "deliveryId")
 public class Delivery {
-
     @Id
-    @GeneratedValue
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int deliveryId;
 
-    LocalDate deliveryDate;
+    @Temporal(TemporalType.DATE)
+    private Date deliveryDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "inventoryItem_id")
-    InventoryItem inventoryItem;
+    @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DeliveryPart> deliveryParts;
 }
