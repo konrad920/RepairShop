@@ -1,9 +1,9 @@
 package edu.wsiiz.repairshop.carWashes.domain.carWash;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import edu.wsiiz.repairshop.carWashes.domain.city.City;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,19 +11,19 @@ import lombok.Setter;
 @Getter
 @Entity
 @Data
-//@EqualsAndHashCode(of = "id")
 public class CarWash {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
-    String name;
+    private String name;
 
-    long scheduleId;
+    private long scheduleId;
 
     @ManyToOne
     @JoinColumn(name = "city_id")
-    private City city;
+    @JsonBackReference
+    City city;
 
 }

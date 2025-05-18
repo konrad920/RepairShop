@@ -1,5 +1,6 @@
 package edu.wsiiz.repairshop.carWashes.domain.city;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWash;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class City {
     private String cityName;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference
     @JoinColumn(name = "city_id")
     List<CarWash> carWashes;
 }
