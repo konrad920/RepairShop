@@ -11,7 +11,11 @@ public class ContactService {
 
   final ContactRepository repository;
 
-  public Contact add(Contact contact) {
+  public Contact get(Long id) {
+    return repository.findById(id).orElse(null);
+  }
+
+  public Contact save(Contact contact) {
     return repository.save(contact);
   }
 

@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/communication/contacts")
+@RequestMapping("/api/communication/contacts")
 @RequiredArgsConstructor
 public class ContactController {
 
@@ -23,7 +23,7 @@ public class ContactController {
   @PostMapping
   public ResponseEntity<Contact> addNew(@RequestBody Contact contact) {
 
-    val created = service.add(contact);
+    val created = service.save(contact);
 
     return ResponseEntity.created(URI.create("")).body(created);
   }
