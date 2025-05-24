@@ -1,0 +1,31 @@
+.dialog::part(header) {
+  margin-bottom: 1.5rem;
+}
+
+.dialog::part(overlay) {
+  max-width: 900px;
+}
+
+.dialog-information::part(header) {
+  background-color: hsl(214, 100%, 48%);
+}
+
+.dialog-question::part(header) {
+  background-color: #D3D3D3;
+}
+
+.dialog-warning::part(header) {
+  background-color: hsl(18, 100%, 44%);
+}
+
+.dialog-error::part(header) {
+  background-color: var(--lumo-error-text-color);
+}
+
+.dialog-success::part(header) {
+  background-color: var(--lumo-success-color);
+}
+
+.dialog-title {
+  color: var(--lumo-base-color);
+}

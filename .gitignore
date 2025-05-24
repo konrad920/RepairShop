@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+/data/
+/src/main/frontend/generated/
+/target/
+/src/main/frontend/index.html
