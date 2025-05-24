@@ -1,11 +1,14 @@
 package edu.wsiiz.repairshop.carWashes.domain.carWash;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import edu.wsiiz.repairshop.carWashes.domain.city.City;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import edu.wsiiz.repairshop.carWashes.domain.appointment.Appointment;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -19,11 +22,10 @@ public class CarWash {
 
     private String name;
 
-    private long scheduleId;
+    private String phoneNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    @JsonBackReference
-    City city;
+    @OneToMany(mappedBy = "carWash", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    List<Appointment> appointments = new ArrayList<>();
 
 }

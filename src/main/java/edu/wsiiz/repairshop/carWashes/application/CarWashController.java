@@ -1,49 +1,36 @@
 package edu.wsiiz.repairshop.carWashes.application;
 
 import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWash;
-import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWashRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("carWashes/carWashes")
+@RequestMapping("carWashes")
 @RequiredArgsConstructor
 public class CarWashController {
 
-    private final CarWashRepository carWashRepository;
+    private final CarWashService carWashService;
 
-    @PostMapping
-    public ResponseEntity<CarWash> addCarWash (@RequestBody CarWash carWash){
-
-        val saved = carWashRepository.save(carWash);
-
-        return ResponseEntity.created(null).body(saved);
-    }
-
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<CarWash>> getAllCarWashes(){
-
-        return ResponseEntity.ok(carWashRepository.findAll());
+        return ResponseEntity.ok(carWashService.findAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CarWash> getCarWashById(@PathVariable long id){
-        return carWashRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PostMapping("/add")
+    public  ResponseEntity<CarWash> addCarWash(@RequestBody CarWash carWash){
+        CarWash saved = carWashService.save(carWash);
+        return ResponseEntity
+                .created(URI.create("carWashes" + saved.getId()))
+                .body(saved);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CarWash> deleteCarWashById(@PathVariable long id){
-        if(carWashRepository.existsById(id)){
-            carWashRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/delete/{deleteId}")
+    public ResponseEntity<Void> deleteCarWash(@PathVariable Long id){
+        carWashService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
