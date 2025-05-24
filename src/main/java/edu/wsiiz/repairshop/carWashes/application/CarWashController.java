@@ -20,6 +20,13 @@ public class CarWashController {
         return ResponseEntity.ok(carWashService.findAll());
     }
 
+    @GetMapping("byId")
+    public ResponseEntity<CarWash> getCarWashById(@RequestParam Long carWashId){
+        CarWash carWash = carWashService.findById(carWashId).orElseThrow(() -> new RuntimeException("CarWash not found"));
+
+        return ResponseEntity.ok(carWash);
+    }
+
     @PostMapping("/add")
     public  ResponseEntity<CarWash> addCarWash(@RequestBody CarWash carWash){
         CarWash saved = carWashService.save(carWash);
@@ -28,9 +35,9 @@ public class CarWashController {
                 .body(saved);
     }
 
-    @DeleteMapping("/delete/{deleteId}")
-    public ResponseEntity<Void> deleteCarWash(@PathVariable Long id){
-        carWashService.deleteById(id);
+    @DeleteMapping("/delete/{carWashId}")
+    public ResponseEntity<Void> deleteCarWash(@PathVariable Long carWashId){
+        carWashService.deleteById(carWashId);
         return ResponseEntity.noContent().build();
     }
 }
