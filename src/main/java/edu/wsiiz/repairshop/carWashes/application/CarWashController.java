@@ -1,6 +1,7 @@
 package edu.wsiiz.repairshop.carWashes.application;
 
 import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWash;
+import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWashRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +15,16 @@ import java.util.List;
 public class CarWashController {
 
     private final CarWashService carWashService;
+    private final CarWashRepository carWashRepository;
 
     @GetMapping("/all")
     public ResponseEntity<List<CarWash>> getAllCarWashes(){
-        return ResponseEntity.ok(carWashService.findAll());
+        return ResponseEntity.ok(carWashRepository.findAll());
     }
 
     @GetMapping("byId")
     public ResponseEntity<CarWash> getCarWashById(@RequestParam Long carWashId){
-        CarWash carWash = carWashService.findById(carWashId).orElseThrow(() -> new RuntimeException("CarWash not found"));
+        CarWash carWash = carWashRepository.findById(carWashId).orElseThrow(() -> new RuntimeException("CarWash not found"));
 
         return ResponseEntity.ok(carWash);
     }

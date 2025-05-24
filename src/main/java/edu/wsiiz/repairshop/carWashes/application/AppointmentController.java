@@ -17,7 +17,7 @@ public class AppointmentController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Appointment>> getAllAppointments() {
-        return ResponseEntity.ok(appointmentService.getAll());
+        return ResponseEntity.ok(appointmentRepository.findAll());
     }
 
     @GetMapping("allByCarWashId/{carWashId}")
