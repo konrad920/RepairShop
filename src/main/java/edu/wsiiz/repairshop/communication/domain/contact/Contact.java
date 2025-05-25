@@ -1,35 +1,40 @@
 package edu.wsiiz.repairshop.communication.domain.contact;
 
 import jakarta.persistence.*;
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.*;
 
 @Entity
 @Data
+@EqualsAndHashCode(of = "id")
+@ToString(exclude = "items")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Contact {
-    @Id
-    Long id;
 
-    Long customerId;
+  @Id
+  @GeneratedValue
+  Long id;
 
-    LocalDate plannedDate;
+  Long customerId;
 
-    LocalDate contactDate;
+  LocalDate plannedDate;
 
-    @Enumerated(EnumType.STRING)
-    ContactChannel channel;
+  LocalDate contactDate;
 
-    @Enumerated(EnumType.STRING)
-    ContactStatus status;
+  @Enumerated(EnumType.STRING)
+  ContactChannel channel;
 
-    String description;
+  @Enumerated(EnumType.STRING)
+  ContactStatus status;
 
-    String note;
+  String description;
 
-    @OneToMany
-            @JoinColumn(name = "contact_id")
-    List<ContactItem> items;
+  String note;
 
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "contact_id")
+  List<ContactItem> items;
 }
