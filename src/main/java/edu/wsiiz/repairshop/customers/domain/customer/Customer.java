@@ -15,7 +15,10 @@ public class Customer {
 
   @Id
   @GeneratedValue
-  Long id;
+  private Long id;
+
+  @Enumerated(EnumType.ORDINAL)
+  private CustomerType type;
 
   private String firstName;
   private String lastName;
@@ -23,8 +26,9 @@ public class Customer {
   private String regon;
   private String companyName;
   private String vehicleRegistrationNumber;
+  private String phoneNumber;
+  private boolean isActive = true;
   private CustomerType customerType;
-  private boolean active = true; // Status: aktywny/nieaktywny
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "customer_id")

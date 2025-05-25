@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import lombok.EqualsAndHashCode;
+
 import java.time.LocalDate;
 
 @Entity
@@ -13,6 +15,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class MarketingConsentCustomer {
     @Id
     @GeneratedValue
