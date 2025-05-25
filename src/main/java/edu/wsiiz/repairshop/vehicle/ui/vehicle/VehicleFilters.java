@@ -1,61 +1,50 @@
 package edu.wsiiz.repairshop.vehicle.ui.vehicle;
 
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import edu.wsiiz.repairshop.communication.domain.contact.Contact;
-import edu.wsiiz.repairshop.communication.domain.contact.ContactStatus;
-import edu.wsiiz.repairshop.foundation.ui.view.ListView.Filters;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import lombok.val;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Consumer;
 
-public class VehicleFilters extends Filters<Contact> {
+public class VehicleFilters extends VerticalLayout {
 
-  static final String STATUS = "status";
+  private final TextField vinField = new TextField("VIN");
+  private final TextField registrationField = new TextField("Rejestracja");
+  private final TextField ownerLastNameField = new TextField("Nazwisko właściciela");
+  private final TextField policyNumberField = new TextField("Nr polisy");
 
-  ComboBox<ContactStatus> status = new ComboBox<>(i18n(STATUS));
+  private final Consumer<Void> onSearchCallback;
 
-  public VehicleFilters(Runnable onSearch) {
-    super(onSearch);
-    setupFilters();
+  public VehicleFilters(Consumer<Void> onSearchCallback) {
+    this.onSearchCallback = onSearchCallback;
+    setupLayout();
   }
 
-  @Override
-  protected void setupFilters() {
+  private void setupLayout() {
+    HorizontalLayout fields = new HorizontalLayout();
+    fields.setSpacing(true);
+    fields.add(vinField, registrationField, ownerLastNameField, policyNumberField);
 
-    status.setItems(ContactStatus.values());
-    status.setItemLabelGenerator(this::i18n);
+    Button searchButton = new Button("Szukaj", e -> onSearchCallback.accept(null));
 
-    HorizontalLayout filtersLayout = new HorizontalLayout(status);
-    filtersLayout.setWidthFull();
-
-    getContent().add(filtersLayout);
+    add(fields, searchButton);
   }
 
-  @Override
-  protected void onReset() {
-
-    status.clear();
-
-    triggerSearch();
+  public String getVin() {
+    return vinField.getValue();
   }
 
-  @Override
-  public Predicate toPredicate(Root<Contact> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-    List<Predicate> predicates = new ArrayList<>();
-
-    val stat = status.getValue();
-    if (stat != null) {
-      predicates.add(cb.in(root.get(STATUS)).value(stat));
-    }
-
-    return cb.and(predicates.toArray(new Predicate[0]));
+  public String getRegistration() {
+    return registrationField.getValue();
   }
 
+  public String getOwnerLastName() {
+    return ownerLastNameField.getValue();
+  }
+
+  public String getPolicyNumber() {
+    return policyNumberField.getValue();
+  }
 }

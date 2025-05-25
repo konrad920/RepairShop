@@ -1,19 +1,22 @@
 package edu.wsiiz.repairshop.vehicle.domain;
 
-import java.util.*;
+import jakarta.persistence.Entity;
+import lombok.*;
 
+import java.util.*;
 
 //Ta klasa jest agregatem!!!
 //Pozostałe klasy w pakiecie model to encje!!
 //Enumy to wartości
 //pakiet values zawiera również wartości
 
-
+@Getter
+@Setter
 public class Vehicle {
     private final UUID id;
     private final VIN vin;
     private final RegistrationNumber registrationNumber;
-    private final String brand;
+    private final String make;
     private final String model;
     private final String chassisNumber;
     private final String bodyNumber;
@@ -32,7 +35,7 @@ public class Vehicle {
         this.id = id;
         this.vin = vin;
         this.registrationNumber = registrationNumber;
-        this.brand = brand;
+        this.make = brand;
         this.model = model;
         this.chassisNumber = chassisNumber;
         this.bodyNumber = bodyNumber;
@@ -47,14 +50,6 @@ public class Vehicle {
 
     public void addInsurancePolicy(InsurancePolicy policy) {
         insuranceHistory.add(policy);
-    }
-
-    public void setChassisParameters(ChassisParameters parameters) {
-        this.chassisParameters = parameters;
-    }
-
-    public void setBodyParameters(BodyParameters parameters) {
-        this.bodyParameters = parameters;
     }
 
     public boolean canBeDeleted() {
@@ -75,4 +70,5 @@ public class Vehicle {
     public UUID id() {
         return id;
     }
+
 }

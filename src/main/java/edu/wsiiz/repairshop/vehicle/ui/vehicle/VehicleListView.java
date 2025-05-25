@@ -2,72 +2,64 @@ package edu.wsiiz.repairshop.vehicle.ui.vehicle;
 
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import edu.wsiiz.repairshop.communication.application.ContactService;
-import edu.wsiiz.repairshop.communication.domain.contact.Contact;
-import edu.wsiiz.repairshop.communication.domain.contact.ContactRepository;
 import edu.wsiiz.repairshop.foundation.ui.component.MessageDialog;
 import edu.wsiiz.repairshop.foundation.ui.view.BaseForm;
 import edu.wsiiz.repairshop.foundation.ui.view.ListView;
 import edu.wsiiz.repairshop.foundation.ui.view.Mode;
+import edu.wsiiz.repairshop.vehicle.domain.Vehicle;
+import org.vehiclefile.application.VehicleService;
 import org.apache.commons.lang3.function.TriFunction;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 
-@PageTitle("Kontakty z klientem")
-@Route("contact-list")
-public class VehicleListView extends ListView<Contact> {
+@PageTitle("Lista pojazdów")
+@Route("vehicle-list")
+public class VehicleListView extends ListView<Vehicle> {
 
-  final ContactRepository contactRepository;
-  final ContactService contactService;
+  final VehicleService vehicleService;
 
-  public VehicleListView(
-      ContactRepository contactRepository,
-      ContactService contactService) {
-    this.contactRepository = contactRepository;
-    this.contactService = contactService;
+
+  public VehicleListView(VehicleService vehicleService) {
+    this.vehicleService = vehicleService;
     setFilters(new VehicleFilters(this::refreshGrid));
-    setTitleText(i18n("title"));
+    setTitleText("Lista pojazdów");
     setupLayout();
   }
 
-  @Override
-  protected TriFunction<Contact, Mode, Consumer<Contact>, BaseForm<Contact>> detailsFormSupplier() {
-    return (item, mode, afterSave) -> new VehicleForm(mode, item, contactService, afterSave);
-  }
 
   @Override
   protected void setupGrid() {
-    grid.addColumn("description", Contact::getDescription);
-    grid.addColumn("plannedDate", Contact::getPlannedDate);
-    grid.addColumn("channel", c -> Optional.ofNullable(c.getChannel()).map(this::i18n).orElse(null));
-    grid.addColumn("status", c -> i18n(c.getStatus()));
+    grid.addColumn("VIN", v -> v.getVin().value());
+    grid.addColumn("Rejestracja", v -> v.getRegistrationNumber().value());
+    grid.addColumn("Marka", Vehicle::getMake);
+    grid.addColumn("Model", Vehicle::getModel);
+    grid.addColumn("Typ", v -> v.getType().name());
 
     grid.setItems(
-        query ->
-            contactRepository
-                .findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("plannedDate")))
-                .stream(),
-        query -> {
-          int count = (int) contactRepository.count(getFilters());
-          countField.setText(String.valueOf(count));
-          return count;
-        });
+            query ->
+                    vehicleService.listVehicles(null, null, null, null).stream(),
+            query -> {
+              int count = vehicleService.listVehicles(null, null, null, null).size();
+              countField.setText(String.valueOf(count));
+              return count;
+            });
   }
 
   @Override
-  protected void onDelete(Contact item) {
+  protected void onDelete(Vehicle item) {
     MessageDialog.question()
-        .withTitle(i18n("confirmation"))
-        .withMessage(i18n("onDelete"))
-        .withNoButton(() -> {
-        })
-        .withYesButton(() -> {
-          contactService.remove(item);
-          refreshGrid();
-        })
-        .show();
+            .withTitle("Potwierdzenie")
+            .withMessage("Czy na pewno chcesz usunąć pojazd?")
+            .withNoButton(() -> {
+            })
+            .withYesButton(() -> {
+              vehicleService.deleteVehicle(item.id());
+              refreshGrid();
+            })
+            .show();
   }
 }
