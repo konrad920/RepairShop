@@ -7,6 +7,9 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = {"adresses","marketingConsents"})
 //@Builder
@@ -29,20 +32,22 @@ public class Customer {
   private String vehicleRegistrationNumber;
   private String phoneNumber;
   private boolean isActive = true;
+  private CustomerType customerType;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "customer_id")
+  private List<Address> addresses;
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "customer_id")
   private List<MarketingConsentCustomer> marketingConsents;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "customer_id")
-  private List<Address> adresses;
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(
+          name = "customer_authorized_person",
+          joinColumns = @JoinColumn(name = "customer_id"),
+          inverseJoinColumns = @JoinColumn(name = "authorized_person_id")
+  )
+  private List<AuthorizedPerson> authorizedPeople;
 
-//  @ManyToMany
-//  @JoinTable(
-//          name = "customer_authorized_person",
-//          joinColumns = @JoinColumn(name = "customer_id"),
-//          inverseJoinColumns = @JoinColumn(name = "authorized_person_id")
-//  )
-//  private Set<AuthorizedPerson> authorizedPeople;
 }

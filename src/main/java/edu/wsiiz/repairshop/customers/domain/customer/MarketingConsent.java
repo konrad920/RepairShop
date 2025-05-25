@@ -13,6 +13,6 @@ public class MarketingConsent {
 
     @Id
     private String id; // Klucz zgody
-    private String description; // Opis zgody
-    private String type; // zakładam rozróżnienie zgód  po typie: "Firma", "Osoba Fizyczna"
+    private String description;  // Opis
+    private String type; // "Firma", "Osoba Fizyczna"
 }
