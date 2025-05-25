@@ -1,6 +1,7 @@
 package edu.wsiiz.repairshop.employee.ui.employee;
 
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
@@ -17,13 +18,15 @@ import java.util.function.Consumer;
 public class EmployeeForm extends BaseForm<Employee> {
 
 
-  TextField firstname = new TextField(i18n("Imie"));
+  TextField firstName = new TextField(i18n("Imie"));
   TextField lastName = new TextField(i18n("Nazwisko"));
   TextField address = new TextField(i18n("Adres"));
   TextField email = new TextField(i18n("Email"));
   TextField workTime = new TextField(i18n("WymiarCzasuPracy"));
   ComboBox<Positions> position = new ComboBox<>(i18n("Stanowisko(position)"));
-  ComboBox<Qualifications> qualification = new ComboBox<>(i18n("Kwalifikacje"));
+//  ComboBox<Qualifications> qualifications = new ComboBox<>(i18n("Kwalifikacje"));
+//  MultiSelectComboBox<Qualifications> qualifications = new MultiSelectComboBox<>(i18n("Kwalifikacje"));
+  private MultiSelectComboBox<Qualifications> qualifications = new MultiSelectComboBox<>(i18n("Kwalifikacje"));
   TextArea notes = new TextArea(i18n("Notatki"));
 
   public EmployeeForm(Mode mode, Employee item, EmployeeService service, Consumer<Employee> afterSave) {
@@ -31,7 +34,7 @@ public class EmployeeForm extends BaseForm<Employee> {
         () -> Employee.builder()
             .position(Positions.KIEROWNIK)
             .build(),
-        () -> service.get(item.getId()),
+        () -> item.getId() == null ? item : service.get(item.getId()),
         service::save,
         afterSave);
   }
@@ -42,12 +45,12 @@ public class EmployeeForm extends BaseForm<Employee> {
     position.setItems(Positions.values());
     position.setItemLabelGenerator(this::i18n);
 
-    qualification.setItems(Qualifications.values());
-    qualification.setItemLabelGenerator(this::i18n);
+    qualifications.setItems(Qualifications.values());
+    qualifications.setItemLabelGenerator(this::i18n);
 
     notes.setMinRows(5);
 
-    layout.add(firstname, lastName, address, email, workTime, position, qualification, notes);
+    layout.add(firstName, lastName, address, email, workTime, position, qualifications, notes);
 
 
 

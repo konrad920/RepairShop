@@ -7,6 +7,7 @@ import com.vaadin.flow.router.Route;
 import edu.wsiiz.repairshop.employee.application.EmployeeService;
 import edu.wsiiz.repairshop.employee.domain.employee.Employee;
 import edu.wsiiz.repairshop.employee.domain.employee.EmployeeRepository;
+import edu.wsiiz.repairshop.employee.domain.employee.Qualifications;
 import edu.wsiiz.repairshop.foundation.ui.component.MessageDialog;
 import edu.wsiiz.repairshop.foundation.ui.view.BaseForm;
 import edu.wsiiz.repairshop.foundation.ui.view.ListView;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 
 @PageTitle("Kontakty z klientem")
@@ -37,7 +39,8 @@ public class EmployeeListView extends ListView<Employee> {
 
   @Override
   protected TriFunction<Employee, Mode, Consumer<Employee>, BaseForm<Employee>> detailsFormSupplier() {
-    return (item, mode, afterSave) -> new EmployeeForm(mode, item, employeeService, afterSave);
+    return (item, mode, afterSave) -> new EmployeeForm(mode, item, employeeService, e -> refreshGrid()     // zamiast afterSave.accept(e)
+    );
   }
 
   @Override
@@ -48,7 +51,16 @@ public class EmployeeListView extends ListView<Employee> {
     grid.addColumn("Email", Employee::getEmail);
     grid.addColumn("WymiarCzasuPracy", Employee::getWorkTime);
     grid.addColumn("Stanowisko", Employee::getPosition);
-    grid.addColumn("Kwalifikacje", Employee::getQualifications);
+//    grid.addColumn("Kwalifikacje", Employee::getQualifications);
+    grid.addColumn("Kwalifikacje", e -> {
+      Set<Qualifications> qualifications = e.getQualifications();
+      if (qualifications == null || qualifications.isEmpty()) return "-";
+      return qualifications.stream()
+              .map(Qualifications::name) // lub this::i18n jeśli chcesz tłumaczenia
+              .sorted()
+              .reduce((a, b) -> a + ", " + b)
+              .orElse("-");
+    });
     grid.addColumn("Notatki", Employee::getNotes);
 //    grid.addColumn("channel", c -> Optional.ofNullable(c.getChannel()).map(this::i18n).orElse(null));
 //    grid.addColumn("status", c -> i18n(c.getStatus()));
@@ -56,7 +68,7 @@ public class EmployeeListView extends ListView<Employee> {
     grid.setItems(
         query ->
             employeeRepository
-                .findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("plannedDate")))
+                .findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize()))
                 .stream(),
         query -> {
           int count = (int) employeeRepository.count(getFilters());

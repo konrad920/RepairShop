@@ -29,7 +29,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     Positions position;
 
-    @ElementCollection(targetClass = Qualifications.class)
+    @ElementCollection(targetClass = Qualifications.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "employee_qualifications", joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "qualification")
