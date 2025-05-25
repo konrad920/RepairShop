@@ -1,14 +1,17 @@
 package edu.wsiiz.repairshop.customers.domain.customer;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Data
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = {"adresses","marketingConsents"})
+//@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Customer {
 
   @Id
