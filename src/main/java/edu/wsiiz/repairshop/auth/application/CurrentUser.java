@@ -1,6 +1,6 @@
 package edu.wsiiz.repairshop.auth.application;
 
-import edu.wsiiz.repairshop.auth.domain.User;
+import edu.wsiiz.repairshop.auth.domain.user.User;
 
 public class CurrentUser {
     private static final ThreadLocal<User> currentUser = new ThreadLocal<>();

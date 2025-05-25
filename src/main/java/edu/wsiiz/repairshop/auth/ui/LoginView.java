@@ -11,7 +11,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.component.UI;
 import edu.wsiiz.repairshop.auth.application.CurrentUser;
 import edu.wsiiz.repairshop.auth.application.UserService;
-import edu.wsiiz.repairshop.auth.domain.User;
+import edu.wsiiz.repairshop.auth.domain.user.User;
 
 
 @Route("login")
