@@ -7,13 +7,14 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import edu.wsiiz.repairshop.payments.domain.invoice.Invoice;
 import edu.wsiiz.repairshop.payments.domain.invoice.InvoiceStatus;
+import edu.wsiiz.repairshop.foundation.ui.view.ListView.Filters;
 
 
 import java.util.function.Consumer;
 
-public class InvoiceFilters extends Composite<HorizontalLayout> {
-
+public class InvoiceFilters extends Filters<Invoice> {
     private final TextField clientField = new TextField("Client");
     private final DatePicker fromDate = new DatePicker("From");
     private final DatePicker toDate = new DatePicker("To");
@@ -24,7 +25,9 @@ public class InvoiceFilters extends Composite<HorizontalLayout> {
 
     private Consumer<InvoiceFilterValues> listener;
 
-    public InvoiceFilters() {
+    public InvoiceFilters(Runnable onSearch) {
+        super(onSearch);
+        setupFilters();
         statusBox.setItems(InvoiceStatus.values());
         statusBox.setClearButtonVisible(true);
 
@@ -39,7 +42,13 @@ public class InvoiceFilters extends Composite<HorizontalLayout> {
         clearButton.addClickListener(e -> clearFilters());
 
         getContent().add(clientField, fromDate, toDate, statusBox, applyButton, clearButton);
+
     }
+
+//    public InvoiceFilters(Runnable onSearch) {
+//        super(onSearch);
+//        setupFilters();
+//    }
 
     public void setFilterListener(Consumer<InvoiceFilterValues> listener) {
         this.listener = listener;
@@ -62,6 +71,16 @@ public class InvoiceFilters extends Composite<HorizontalLayout> {
         toDate.clear();
         statusBox.clear();
         fireFilterEvent();
+    }
+
+    @Override
+    protected void setupFilters() {
+
+    }
+
+    @Override
+    protected void onReset() {
+
     }
 
     public record InvoiceFilterValues(

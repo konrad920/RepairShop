@@ -46,5 +46,13 @@ public class InvoiceService {
                 })
                 .orElse(false);
     }
+
+    public void remove(Invoice item) {
+        repository.delete(item);
+    }
+
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }
 
