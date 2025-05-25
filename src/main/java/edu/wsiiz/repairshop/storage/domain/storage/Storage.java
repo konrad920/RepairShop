@@ -1,10 +1,12 @@
 package edu.wsiiz.repairshop.storage.domain.storage;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @Entity
+@Data
 @EqualsAndHashCode(of = "storageId")
 public class Storage {
 
