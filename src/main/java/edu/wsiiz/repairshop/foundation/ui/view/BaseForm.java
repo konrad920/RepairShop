@@ -62,7 +62,7 @@ public abstract class BaseForm<M> extends FormLayout implements I18nAware {
     return (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
   }
 
-  public final void init(Dialog dialog) {
+  public void init(Dialog dialog) {
 
     if (!mode.isAdd()) {
       this.model = reader.get();
