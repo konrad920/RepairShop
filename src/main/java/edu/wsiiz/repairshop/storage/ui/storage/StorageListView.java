@@ -1,66 +1,95 @@
 package edu.wsiiz.repairshop.storage.ui.storage;
 
+
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import edu.wsiiz.repairshop.communication.application.ContactService;
-import edu.wsiiz.repairshop.communication.domain.contact.Contact;
-import edu.wsiiz.repairshop.communication.domain.contact.ContactRepository;
-import edu.wsiiz.repairshop.communication.ui.contact.ContactFilters;
-import edu.wsiiz.repairshop.communication.ui.contact.ContactForm;
-import edu.wsiiz.repairshop.foundation.ui.component.MessageDialog;
-import edu.wsiiz.repairshop.foundation.ui.view.BaseForm;
-import edu.wsiiz.repairshop.foundation.ui.view.ListView;
-import edu.wsiiz.repairshop.foundation.ui.view.Mode;
+import edu.wsiiz.repairshop.storage.domain.storage.Storage;
+import edu.wsiiz.repairshop.storage.domain.storage.StorageRepository;
 
-import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.List;
 
-import org.apache.commons.lang3.function.TriFunction;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
-@PageTitle("Magazyn")
+/**
+ * Widok GUI dla zarządzania magazynami.
+ */
+@PageTitle("Magazyny")
 @Route("storage")
-public class StorageListView extends ListView<Contact> {
+public class StorageListView extends VerticalLayout {
 
-    final ContactRepository contactRepository;
-    final ContactService contactService;
+    private final StorageRepository storageRepository;
+    private final Grid<Storage> grid = new Grid<>(Storage.class);
+    private final Button addButton = new Button("Dodaj Magazyn");
+    private final Button refreshButton = new Button("Odśwież");
 
-//    public ContactListView(ContactRepository contactRepository, ResourceService contactService) {
-//        this.contactRepository = contactRepository;
-//        this.contactService = contactService;
-//        setFilters(new ContactFilters(this::refreshGrid));
-//        setTitleText(i18n("title"));
-//        setupLayout();
-//    }
-//
-//    @Override
-//    protected TriFunction<Contact, Mode, Consumer<Contact>, BaseForm<Contact>> detailsFormSupplier() {
-//        return (item, mode, afterSave) -> new ContactForm(mode, item, contactService, afterSave);
-//    }
+    public StorageListView(StorageRepository storageRepository) {
+        this.storageRepository = storageRepository;
 
-    @Override
-    protected void setupGrid() {
-//        tutaj dodać kolumny
-        grid.addColumn("description", Contact::getDescription);
-        grid.addColumn("plannedDate", Contact::getPlannedDate);
-        grid.addColumn("channel", c -> Optional.ofNullable(c.getChannel()).map(this::i18n).orElse(null));
-        grid.addColumn("status", c -> i18n(c.getStatus()));
+        setSizeFull();
+        configureGrid();
+        setupButtons();
 
-////        pobranie z bazy findAll
-//        grid.setItems(query -> contactRepository.findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("plannedDate"))).stream(), query -> {
-//            int count = (int) contactRepository.count(getFilters());
-//            countField.setText(String.valueOf(count));
-//            return count;
-//        });
-//    }
-//
-//    @Override
-//    protected void onDelete(Contact item) {
-//        MessageDialog.question().withTitle(i18n("confirmation")).withMessage(i18n("onDelete")).withNoButton(() -> {
-//        }).withYesButton(() -> {
-//            contactService.remove(item);
-//            refreshGrid();
-//        }).show();
+        // Layout zawierający interfejs do zarządzania
+        HorizontalLayout toolbar = new HorizontalLayout(addButton, refreshButton);
+        toolbar.setPadding(false);
+
+        add(toolbar, grid);
+        refreshGrid();
+    }
+
+    /**
+     * Konfiguracja tabeli Grid wyświetlającej dane magazynów.
+     */
+    private void configureGrid() {
+        grid.setSizeFull();
+
+        // Kolumny tabeli
+        grid.removeAllColumns();
+        grid.addColumn(Storage::getStorageId).setHeader("ID Magazynu");
+        grid.addColumn(Storage::getAddress).setHeader("Adres");
+
+        // Akcja po kliknięciu
+        grid.asSingleSelect().addValueChangeListener(event -> {
+            Storage selected = event.getValue();
+            if (selected != null) {
+                showStorageDetails(selected);
+            }
+        });
+    }
+
+    /**
+     * Konfiguracja przycisków GUI.
+     */
+    private void setupButtons() {
+        addButton.addClickListener(event -> createNewStorage());
+        refreshButton.addClickListener(event -> refreshGrid());
+    }
+
+    /**
+     * Odświeża dane w tabeli.
+     */
+    private void refreshGrid() {
+        List<Storage> storages = storageRepository.findAll();
+        grid.setItems(storages);
+    }
+
+    /**
+     * Otwiera nowy formularz do tworzenia magazynu.
+     */
+    private void createNewStorage() {
+        // Wyświetlenie formularza tworzenia nowego magazynu (do zaimplementowania)
+        System.out.println("Tworzenie nowego magazynu...");
+    }
+
+    /**
+     * Wyświetla szczegóły wybranego magazynu.
+     *
+     * @param selected wybrany magazyn
+     */
+    private void showStorageDetails(Storage selected) {
+        // Obsługa wyświetlania szczegółów magazynu (do zaimplementowania)
+        System.out.printf("ID Magazynu: %d, Adres: %s%n", selected.getStorageId(), selected.getAddress());
     }
 }
