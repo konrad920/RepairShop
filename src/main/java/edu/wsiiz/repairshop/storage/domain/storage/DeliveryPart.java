@@ -1,12 +1,13 @@
 package edu.wsiiz.repairshop.storage.domain.storage;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @EqualsAndHashCode(of = "deliveryPartId")
-public class DeliveryPart implements Serializable {
+public class DeliveryPart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +17,8 @@ public class DeliveryPart implements Serializable {
     @JoinColumn(name = "delivery_id", nullable = false)
     private Delivery delivery;
 
-    private double quantity;
+    private int quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "resource_id", nullable = false)
-    private Resource resource;
+    @OneToMany(mappedBy = "deliveryPart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Resource> resources;
 }

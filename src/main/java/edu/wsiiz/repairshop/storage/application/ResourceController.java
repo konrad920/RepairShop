@@ -52,7 +52,7 @@ public class ResourceController {
    */
   @PatchMapping("/{resourceId}/update-quantity")
   public ResponseEntity<Void> updateResourceQuantity(
-          @PathVariable Long resourceId, @RequestParam Double quantityNow) {
+          @PathVariable Long resourceId, @RequestParam int quantityNow) {
     Optional<Resource> found = resourceRepository.findById(resourceId);
 
     if (found.isEmpty()) {

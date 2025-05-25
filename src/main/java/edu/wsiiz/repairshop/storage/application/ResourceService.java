@@ -36,7 +36,7 @@ public class ResourceService {
    * @param resource zasób
    * @param quantityNow nowa ilość zasobu
    */
-  public void updateResourceQuantity(Resource resource, Double quantityNow) {
+  public void updateResourceQuantity(Resource resource, int quantityNow) {
     resource.setQuantity(quantityNow);
     resourceRepository.save(resource);
   }
@@ -47,7 +47,7 @@ public class ResourceService {
    * @param resource zasób
    */
   public void handleConsumptionAndRemoveIfEmpty(Resource resource) {
-    if (resource.getQuantity() != null && resource.getQuantity() <= 0) {
+    if (resource.getQuantity() <= 0) {
       resourceRepository.delete(resource);
     }
   }

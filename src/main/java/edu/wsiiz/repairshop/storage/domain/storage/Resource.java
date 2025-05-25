@@ -32,10 +32,11 @@ public class Resource {
     @Temporal(TemporalType.DATE)
     private Date expirationDate;
 
-    private Double quantity;
+    private int quantity;
 
-    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DeliveryPart> deliveryParts;
+    @ManyToOne
+    @JoinColumn(name = "delivery_part_id", nullable = false)
+    private DeliveryPart deliveryPart;
 
     @ManyToOne
     @JoinColumn(name = "storage_id", nullable = false)
