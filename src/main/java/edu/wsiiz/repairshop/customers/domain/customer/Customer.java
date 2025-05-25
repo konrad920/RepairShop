@@ -10,27 +10,36 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(of = "id")
 public class Customer {
+
   @Id
   @GeneratedValue
-  Long id;
+  private Long id;
 
   @Enumerated(EnumType.ORDINAL)
-  CustomerType type;
+  private CustomerType type;
 
-  @Enumerated(EnumType.ORDINAL)
-  CustomerStatus status;
+  private String firstName;
+  private String lastName;
+  private String pesel;
+  private String regon;
+  private String companyName;
+  private String vehicleRegistrationNumber;
+  private String phoneNumber;
+  private boolean isActive = true;
 
-  String contactNumber;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "customer_id")
+  private List<MarketingConsentCustomer> marketingConsents;
 
-//  @OneToMany(cascade = CascadeType.ALL)
-//  @JoinColumn(name = "customer_id")
-//  List<MarketingConsents> marketingConsents;
-//
-//  @OneToMany(cascade = CascadeType.ALL)
-//  @JoinColumn(name = "customer_id")
-//  List<Address> adresses;
-//
-//  @OneToMany(cascade = CascadeType.ALL)
-//  @JoinColumn(name = "customer_id")
-//  List<AuthorizedPerson> authorizedPeople;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "customer_id")
+  private List<Address> adresses;
+
+//  @ManyToMany
+//  @JoinTable(
+//          name = "customer_authorized_person",
+//          joinColumns = @JoinColumn(name = "customer_id"),
+//          inverseJoinColumns = @JoinColumn(name = "authorized_person_id")
+//  )
+//  private Set<AuthorizedPerson> authorizedPeople;
 }

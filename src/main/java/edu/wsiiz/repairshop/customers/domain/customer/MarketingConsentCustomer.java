@@ -2,10 +2,13 @@ package edu.wsiiz.repairshop.customers.domain.customer;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.time.LocalDate;
 
 @Entity
 @Data
+@EqualsAndHashCode(of = "id")
 public class MarketingConsentCustomer {
     @Id
     @GeneratedValue
