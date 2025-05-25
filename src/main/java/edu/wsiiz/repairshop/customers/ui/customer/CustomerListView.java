@@ -1,5 +1,7 @@
 package edu.wsiiz.repairshop.customers.ui.customer;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import edu.wsiiz.repairshop.communication.application.ContactService;
@@ -19,6 +21,7 @@ import edu.wsiiz.repairshop.foundation.ui.view.Mode;
 import org.apache.commons.lang3.function.TriFunction;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.vaadin.lineawesome.LineAwesomeIcon;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -40,10 +43,18 @@ public class CustomerListView extends ListView<Customer> {
     setupLayout();
   }
 
-//  @Override
-//  protected TriFunction<Contact, Mode, Consumer<Contact>, BaseForm<Contact>> detailsFormSupplier() {
-//    return (item, mode, afterSave) -> new ContactForm(mode, item, contactService, afterSave);
-//  }
+  @Override
+  protected void addAdditionalActions(HorizontalLayout actions) {
+    Button addBtn = new Button(LineAwesomeIcon.PLUS_SOLID.create());
+    addBtn.addClickListener(e -> onAdd());
+    actions.add( addBtn);
+  }
+
+  @Override
+  protected TriFunction<Customer, Mode, Consumer<Customer>, BaseForm<Customer>> detailsFormSupplier() {
+    return (id, mode, afterSave) ->
+            new CustomerForm(mode, id, customerService, afterSave);
+  }
 
   @Override
   protected void setupGrid() {
@@ -52,15 +63,18 @@ public class CustomerListView extends ListView<Customer> {
     grid.addColumn("lastName", Customer::getLastName);
     grid.addColumn("pesel", Customer::getPesel);
     grid.addColumn("companyName", Customer::getCompanyName);
+    grid.addColumn("regon", Customer::getRegon);
     grid.addColumn("phoneNumber", Customer::getPhoneNumber);
     grid.addColumn("vehicleRegistrationNumber", Customer::getVehicleRegistrationNumber);
 
 
+
+
     grid.setItems(
-        query ->
-                customerRepository
-                .findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("id")))
-                .stream());
+            query ->
+                    customerRepository
+                            .findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("id")))
+                            .stream());
 //        query -> {
 //          int count = (int) customerRepository.count(getFilters());
 //          countField.setText(String.valueOf(count));
@@ -71,14 +85,14 @@ public class CustomerListView extends ListView<Customer> {
   @Override
   protected void onDelete(Customer item) {
     MessageDialog.question()
-        .withTitle(i18n("confirmation"))
-        .withMessage(i18n("onDelete"))
-        .withNoButton(() -> {
-        })
-        .withYesButton(() -> {
-          customerService.remove(item);
-          refreshGrid();
-        })
-        .show();
+            .withTitle(i18n("confirmation"))
+            .withMessage(i18n("onDelete"))
+            .withNoButton(() -> {
+            })
+            .withYesButton(() -> {
+              customerService.remove(item);
+              refreshGrid();
+            })
+            .show();
   }
 }

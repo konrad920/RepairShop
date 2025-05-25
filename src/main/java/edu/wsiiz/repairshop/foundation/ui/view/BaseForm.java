@@ -30,8 +30,8 @@ public abstract class BaseForm<M> extends FormLayout implements I18nAware {
 
   final Supplier<M> factory;
   final Supplier<M> reader;
-  protected final UnaryOperator<M> writer;
-  protected final Consumer<M> afterSave;
+  final UnaryOperator<M> writer;
+  final Consumer<M> afterSave;
 
   protected M model;
 
@@ -62,7 +62,7 @@ public abstract class BaseForm<M> extends FormLayout implements I18nAware {
     return (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
   }
 
-  public void init(Dialog dialog) {
+  public final void init(Dialog dialog) {
 
     if (!mode.isAdd()) {
       this.model = reader.get();
@@ -122,7 +122,7 @@ public abstract class BaseForm<M> extends FormLayout implements I18nAware {
     binder.bindInstanceFields(this);
   }
 
-  protected void onSave(ClickEvent<Button> event) {
+  private void onSave(ClickEvent<Button> event) {
     try {
       binder.writeBean(model);
     } catch (ValidationException e) {

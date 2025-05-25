@@ -12,9 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = {"adresses","marketingConsents"})
-//@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
+
 public class Customer {
 
   @Id
