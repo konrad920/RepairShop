@@ -1,9 +1,11 @@
 package edu.wsiiz.repairshop.foundation.ui.component;
 
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.shared.Registration;
 import edu.wsiiz.repairshop.foundation.ui.i18n.I18nAware;
 
-public class Grid<T> extends com.vaadin.flow.component.grid.Grid<T> implements I18nAware {
+public class Grid<T> extends com.vaadin.flow.component.grid.Grid<T> implements I18nAware, HasValue<HasValue.ValueChangeEvent, FIELDVALUE> {
 
   private final Class<?> ownerClass;
 
@@ -17,4 +19,38 @@ public class Grid<T> extends com.vaadin.flow.component.grid.Grid<T> implements I
         .setAutoWidth(true);
   }
 
+  @Override
+  public void setValue(FIELDVALUE fieldvalue) {
+
+  }
+
+  @Override
+  public FIELDVALUE getValue() {
+    return null;
+  }
+
+  @Override
+  public Registration addValueChangeListener(ValueChangeListener<? super ValueChangeEvent> valueChangeListener) {
+    return null;
+  }
+
+  @Override
+  public void setReadOnly(boolean b) {
+
+  }
+
+  @Override
+  public boolean isReadOnly() {
+    return false;
+  }
+
+  @Override
+  public void setRequiredIndicatorVisible(boolean b) {
+
+  }
+
+  @Override
+  public boolean isRequiredIndicatorVisible() {
+    return false;
+  }
 }

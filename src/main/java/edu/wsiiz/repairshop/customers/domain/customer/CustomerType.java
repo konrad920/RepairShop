@@ -1,6 +1,6 @@
 package edu.wsiiz.repairshop.customers.domain.customer;
 
-public enum CustomerTypeTEMP {
+public enum CustomerType {
     INDIVIDUAL,
     COMPANY
 }
