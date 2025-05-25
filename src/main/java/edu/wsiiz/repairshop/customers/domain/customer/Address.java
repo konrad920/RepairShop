@@ -1,8 +1,6 @@
 package edu.wsiiz.repairshop.customers.domain.customer;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,4 +19,8 @@ public class Address {
     private String zipCode;
     private String country;
     private String type; //  "Korespondencyjny", "Siedziby"
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }
