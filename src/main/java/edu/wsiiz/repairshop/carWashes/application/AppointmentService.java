@@ -24,6 +24,11 @@ public class AppointmentService {
             throw new IllegalArgumentException("Termin koliduje z inną wizytą.");
         }
 
+        if(appointment.getStartTime().isAfter(appointment.getEndTime())){
+            throw new IllegalArgumentException("Czas staru jest późniejszy niż czas końcowy.");
+        }
+
+
         CarWash carWash = carWashRepository.findById(carWashId)
                 .orElseThrow(() -> new EntityNotFoundException("Myjnia nie znaleziona"));
 
