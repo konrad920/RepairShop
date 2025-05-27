@@ -2,6 +2,7 @@ package edu.wsiiz.repairshop.carWashes.application;
 
 import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWash;
 import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWashRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class CarWashService {
     }
 
     public void deleteById(long id){
+        if (!carWashRepository.existsById(id)) {
+            throw new EntityNotFoundException("Nie znaleziono takiej myjni samochodowej");
+        }
         carWashRepository.deleteById(id);
     }
 }

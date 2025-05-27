@@ -2,6 +2,7 @@ package edu.wsiiz.repairshop.carWashes.application;
 
 import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWash;
 import edu.wsiiz.repairshop.carWashes.domain.carWash.CarWashRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,18 @@ public class CarWashController {
     @PostMapping("/add")
     public  ResponseEntity<CarWash> addCarWash(@RequestBody CarWash carWash){
         CarWash saved = carWashService.save(carWash);
+        URI location = URI.create(String.format("/carWashes/%d", saved.getId()));
         return ResponseEntity
-                .created(URI.create("carWashes" + saved.getId()))
+                .created(location)
                 .body(saved);
     }
 
     @DeleteMapping("/delete/{carWashId}")
-    public ResponseEntity<Void> deleteCarWash(@PathVariable Long carWashId){
+    public ResponseEntity<?> deleteCarWash(@PathVariable Long carWashId){
+        try{
         carWashService.deleteById(carWashId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();}catch(EntityNotFoundException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

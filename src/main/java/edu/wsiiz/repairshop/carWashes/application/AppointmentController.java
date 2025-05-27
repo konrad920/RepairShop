@@ -1,10 +1,13 @@
 package edu.wsiiz.repairshop.carWashes.application;
 
 import edu.wsiiz.repairshop.carWashes.domain.appointment.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -31,15 +34,27 @@ public class AppointmentController {
     }
 
     @PostMapping("/add/{carWashId}")
-    public ResponseEntity<Appointment> addAppointment(@PathVariable Long carWashId,
-                                                          @RequestBody Appointment appointment) {
-        Appointment saved = appointmentService.save(carWashId, appointment);
-        return ResponseEntity.ok(saved);
+    public ResponseEntity<?> addAppointment(@PathVariable Long carWashId,
+                                            @Validated @RequestBody Appointment appointment) {
+
+        try {
+            Appointment saved = appointmentService.save(carWashId, appointment);
+            URI location = URI.create(String.format("/appointments/%d", saved.getId()));
+            return ResponseEntity.created(location).body(saved);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete/{appointmentId}")
-    public ResponseEntity<Void> deleteAppointment(@PathVariable Long appointmentId) {
-        appointmentService.deleteById(appointmentId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long appointmentId) {
+        try {
+            appointmentService.deleteById(appointmentId);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
