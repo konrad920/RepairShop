@@ -16,7 +16,7 @@ import java.util.List;
 public class AppointmentController {
     private final AppointmentService appointmentService;
     private final AppointmentRepository appointmentRepository;
-    private final CarWashService carWashService;
+    //private final CarWashService carWashService;
 
     @GetMapping("/all")
     public ResponseEntity<List<Appointment>> getAllAppointments() {

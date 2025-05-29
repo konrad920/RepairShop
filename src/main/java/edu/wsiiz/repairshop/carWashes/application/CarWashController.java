@@ -19,31 +19,36 @@ public class CarWashController {
     private final CarWashRepository carWashRepository;
 
     @GetMapping("/all")
-    public ResponseEntity<List<CarWash>> getAllCarWashes(){
+    public ResponseEntity<List<CarWash>> getAllCarWashes() {
         return ResponseEntity.ok(carWashRepository.findAll());
     }
 
     @GetMapping("byId")
-    public ResponseEntity<CarWash> getCarWashById(@RequestParam Long carWashId){
+    public ResponseEntity<CarWash> getCarWashById(@RequestParam Long carWashId) {
         CarWash carWash = carWashRepository.findById(carWashId).orElseThrow(() -> new RuntimeException("CarWash not found"));
 
         return ResponseEntity.ok(carWash);
     }
 
-    @PostMapping("/add")
-    public  ResponseEntity<CarWash> addCarWash(@RequestBody CarWash carWash){
-        CarWash saved = carWashService.save(carWash);
-        URI location = URI.create(String.format("/carWashes/%d", saved.getId()));
-        return ResponseEntity
-                .created(location)
-                .body(saved);
+    @PostMapping("/add/{cityId}")
+    public ResponseEntity<?> addCarWash(@PathVariable Long cityId, @RequestBody CarWash carWash) {
+        try {
+            CarWash saved = carWashService.save(cityId, carWash);
+            URI location = URI.create(String.format("/carWashes/%d", saved.getId()));
+            return ResponseEntity
+                    .created(location)
+                    .body(saved);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete/{carWashId}")
-    public ResponseEntity<?> deleteCarWash(@PathVariable Long carWashId){
-        try{
-        carWashService.deleteById(carWashId);
-        return ResponseEntity.noContent().build();}catch(EntityNotFoundException e){
+    public ResponseEntity<?> deleteCarWash(@PathVariable Long carWashId) {
+        try {
+            carWashService.deleteById(carWashId);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
