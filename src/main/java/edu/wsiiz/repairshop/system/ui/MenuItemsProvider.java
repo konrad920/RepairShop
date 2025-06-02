@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wsiiz.repairshop.payments.ui.invoice.InvoiceListView;
+import edu.wsiiz.repairshop.payments.ui.settlement.SettlementListView;
 import lombok.val;
 import org.springframework.stereotype.Component;
 import org.vaadin.lineawesome.LineAwesomeIcon;
@@ -18,6 +19,7 @@ public class MenuItemsProvider {
     items.add(new MenuItemInfo("Witamy", LineAwesomeIcon.HOME_SOLID.create(), WelcomeView.class));
     items.add(new MenuItemInfo("Kontakty z klientami", LineAwesomeIcon.HEADSET_SOLID.create(), ContactListView.class));
     items.add(new MenuItemInfo("Faktury", LineAwesomeIcon.BOOKMARK.create(), InvoiceListView.class));
+    items.add(new MenuItemInfo("Rozliczenia", LineAwesomeIcon.MONEY_BILL_SOLID.create(), SettlementListView.class));
     return items;
   }
 
