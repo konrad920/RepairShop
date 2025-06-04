@@ -3,6 +3,8 @@ package edu.wsiiz.repairshop.auth.domain.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Data
 @Table(name = "APPLICATION_USER")
@@ -22,6 +24,6 @@ public class User {
   @Column(nullable = false)
   String password;
 
-  @Enumerated(EnumType.STRING)
-  UserRole role;
+  @ManyToMany(fetch = FetchType.EAGER)
+  private Set<Role> roles;
 }
