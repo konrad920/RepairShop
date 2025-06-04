@@ -14,8 +14,6 @@ import java.util.function.Consumer;
 
 public class ContactForm extends BaseForm<Contact> {
 
-  String userCode;
-
   TextField description = new TextField(i18n("description"));
   DatePicker plannedDate = new DatePicker(i18n("plannedDate"));
   ComboBox<ContactChannel> channel = new ComboBox<>(i18n("channel"));
