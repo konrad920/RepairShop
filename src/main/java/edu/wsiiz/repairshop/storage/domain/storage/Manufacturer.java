@@ -1,15 +1,20 @@
 package edu.wsiiz.repairshop.storage.domain.storage;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+
 import java.util.List;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "manufacturerId")
 public class Manufacturer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int manufacturerId;
+    private Long manufacturerId;
 
     private String name;
 

@@ -1,95 +1,60 @@
 package edu.wsiiz.repairshop.storage.ui.storage;
 
-
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import edu.wsiiz.repairshop.foundation.ui.component.MessageDialog;
+import edu.wsiiz.repairshop.foundation.ui.view.BaseForm;
+import edu.wsiiz.repairshop.foundation.ui.view.ListView;
+import edu.wsiiz.repairshop.foundation.ui.view.Mode;
 import edu.wsiiz.repairshop.storage.domain.storage.Storage;
 import edu.wsiiz.repairshop.storage.domain.storage.StorageRepository;
+import org.apache.commons.lang3.function.TriFunction;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Widok GUI dla zarządzania magazynami.
  */
 @PageTitle("Magazyny")
 @Route("storage")
-public class StorageListView extends VerticalLayout {
+public class StorageListView extends ListView<Storage> {
 
     private final StorageRepository storageRepository;
-    private final Grid<Storage> grid = new Grid<>(Storage.class);
-    private final Button addButton = new Button("Dodaj Magazyn");
-    private final Button refreshButton = new Button("Odśwież");
 
     public StorageListView(StorageRepository storageRepository) {
         this.storageRepository = storageRepository;
 
-        setSizeFull();
-        configureGrid();
-        setupButtons();
-
-        // Layout zawierający interfejs do zarządzania
-        HorizontalLayout toolbar = new HorizontalLayout(addButton, refreshButton);
-        toolbar.setPadding(false);
-
-        add(toolbar, grid);
-        refreshGrid();
+        setFilters(new StorageFilters(this::refreshGrid));
+//        setTitleText(i18n("title"));
+        setupLayout();
     }
 
-    /**
-     * Konfiguracja tabeli Grid wyświetlającej dane magazynów.
-     */
-    private void configureGrid() {
-        grid.setSizeFull();
-
-        // Kolumny tabeli
-        grid.removeAllColumns();
-        grid.addColumn(Storage::getStorageId).setHeader("ID Magazynu");
-        grid.addColumn(Storage::getAddress).setHeader("Adres");
-
-        // Akcja po kliknięciu
-        grid.asSingleSelect().addValueChangeListener(event -> {
-            Storage selected = event.getValue();
-            if (selected != null) {
-                showStorageDetails(selected);
-            }
-        });
+    @Override
+    protected TriFunction<Storage, Mode, Consumer<Storage>, BaseForm<Storage>> detailsFormSupplier() {
+        return (item, mode, afterSave) -> new StorageForm(mode, item, storageRepository, afterSave);
     }
 
-    /**
-     * Konfiguracja przycisków GUI.
-     */
-    private void setupButtons() {
-        addButton.addClickListener(event -> createNewStorage());
-        refreshButton.addClickListener(event -> refreshGrid());
+    @Override
+    protected void setupGrid() {
+        grid.addColumn("storageId", Storage::getStorageId).setHeader("ID Magazynu");
+        grid.addColumn("address", Storage::getAddress).setHeader("Adres");
+        grid.setItems(query -> storageRepository.findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("address"))).stream());
     }
 
-    /**
-     * Odświeża dane w tabeli.
-     */
-    private void refreshGrid() {
-        List<Storage> storages = storageRepository.findAll();
-        grid.setItems(storages);
-    }
-
-    /**
-     * Otwiera nowy formularz do tworzenia magazynu.
-     */
-    private void createNewStorage() {
-        // Wyświetlenie formularza tworzenia nowego magazynu (do zaimplementowania)
-        System.out.println("Tworzenie nowego magazynu...");
-    }
-
-    /**
-     * Wyświetla szczegóły wybranego magazynu.
-     *
-     * @param selected wybrany magazyn
-     */
-    private void showStorageDetails(Storage selected) {
-        // Obsługa wyświetlania szczegółów magazynu (do zaimplementowania)
-        System.out.printf("ID Magazynu: %d, Adres: %s%n", selected.getStorageId(), selected.getAddress());
+    @Override
+    protected void onDelete(Storage item) {
+        MessageDialog.question()
+                .withTitle("confirmation")
+                .withMessage("onDelete")
+                .withNoButton(() -> {
+                })
+                .withYesButton(() -> {
+                    storageRepository.delete(item);
+                    refreshGrid();
+                })
+                .show();
     }
 }

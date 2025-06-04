@@ -21,6 +21,10 @@ public class ResourceService {
     return resourceRepository.save(resource);
   }
 
+  public Resource get(Long id) {
+    return resourceRepository.findById(id).orElse(null);
+  }
+
   /**
    * Usuwa zasób z bazy danych.
    *

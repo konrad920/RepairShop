@@ -10,7 +10,7 @@ import java.util.List;
 public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int deliveryId;
+    private Long deliveryId;
 
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;

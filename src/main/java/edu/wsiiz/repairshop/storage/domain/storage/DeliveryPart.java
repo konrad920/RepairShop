@@ -11,7 +11,7 @@ public class DeliveryPart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int deliveryPartId;
+    private Long deliveryPartId;
 
     @ManyToOne
     @JoinColumn(name = "delivery_id", nullable = false)
