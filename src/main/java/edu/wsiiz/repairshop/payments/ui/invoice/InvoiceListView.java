@@ -85,6 +85,7 @@ import java.util.function.Consumer;
 @RolesAllowed("ADMIN")
 public class InvoiceListView extends ListView<Invoice> {
 
+
     private final InvoiceService invoiceService;
 
     public InvoiceListView(InvoiceService invoiceService) {
@@ -93,6 +94,7 @@ public class InvoiceListView extends ListView<Invoice> {
         setFilters(new InvoiceFilters(this::refreshGrid));
         setupLayout();
     }
+
 
     @Override
     protected void setupGrid() {
