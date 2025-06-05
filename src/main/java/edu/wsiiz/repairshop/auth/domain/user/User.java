@@ -3,6 +3,7 @@ package edu.wsiiz.repairshop.auth.domain.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -26,4 +27,10 @@ public class User {
 
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<Role> roles;
+
+  public User(String username,String password,Set<Role> roles) {
+      this.username = username;
+      this.password = password;
+      this.roles = (roles != null) ? roles : new HashSet<>();
+  }
 }
