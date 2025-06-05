@@ -102,10 +102,16 @@ public class InvoiceListView extends ListView<Invoice> {
         grid.addColumn(Invoice::getTotalGrossAmount).setHeader("Amount");
     }
 
-//    @Override
-//    protected TriFunction<Invoice, Mode, Consumer<Invoice>, BaseForm<Invoice>> detailsFormSupplier() {
-//        return (invoice, mode, onSave) -> new InvoiceForm(invoice, mode, onSave, invoiceService);
-//    }
+    @Override
+    protected TriFunction<Invoice, Mode, Consumer<Invoice>, BaseForm<Invoice>> detailsFormSupplier() {
+        // Dostarcza formularz faktury (InvoiceForm) do użycia w trybie CREATE lub EDIT.
+        // Parametry:
+        // - invoice: obiekt do edycji (lub pusty przy tworzeniu)
+        // - mode: tryb działania (CREATE / EDIT)
+        // - onSave: callback wywoływany po zapisaniu danych (np. odświeżenie listy)
+        return (invoice, mode, onSave) -> new InvoiceForm(mode, invoice, invoiceService, onSave);
+    }
+
 
     @Override
     protected void onDelete(Invoice invoice) {
