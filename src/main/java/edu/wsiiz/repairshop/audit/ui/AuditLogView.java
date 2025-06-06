@@ -6,6 +6,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import edu.wsiiz.repairshop.audit.application.AuditService;
 import edu.wsiiz.repairshop.audit.domain.AuditLog;
+import edu.wsiiz.repairshop.auth.domain.user.UserRole;
+import edu.wsiiz.repairshop.auth.security.Secured;
 import jakarta.annotation.security.RolesAllowed;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 @Route("admin/audit")
 @PageTitle("Log audytowy")
 @RolesAllowed("ADMIN")
+@Secured(roles = {UserRole.ADMIN})
 public class AuditLogView extends VerticalLayout {
 
     private final AuditService auditService;

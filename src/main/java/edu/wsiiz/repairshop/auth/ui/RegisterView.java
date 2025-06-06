@@ -49,7 +49,7 @@ public class RegisterView extends VerticalLayout {
 
             try {
                 Role role = userService.findOrCreateRole(roleName);
-                User user = new User(username, password, Collections.singleton(role));
+                User user = new User(username, password,role);
                 userService.save(user);
 
                 Notification.show("Rejestracja zakończona sukcesem!", 3000, Notification.Position.MIDDLE);

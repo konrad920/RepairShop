@@ -25,8 +25,8 @@ public class MenuItemsProvider {
     items.add(new MenuItemInfo("Strona główna", LineAwesomeIcon.HOME_SOLID.create(), WelcomeView.class));
 
     if (user != null) {
-      boolean isAdmin = user.getRoles().stream().anyMatch(r -> r.getName() == UserRole.ADMIN);
-      boolean isEmployee = user.getRoles().stream().anyMatch(r -> r.getName() == UserRole.EMPLOYEE);
+      boolean isAdmin = user.getRole().getName() == UserRole.ADMIN;
+      boolean isEmployee = user.getRole().getName() == UserRole.EMPLOYEE;
 
       // Widok kontaktów: dla pracownika i admina
       if (isAdmin || isEmployee) {

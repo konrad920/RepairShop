@@ -78,11 +78,11 @@ public class DataInitializer implements CommandLineRunner {
         for (User user : users) {
             if (userRepository.findByUsername(user.getUsername()).isEmpty()) {
                 if ("admin".equals(user.getUsername())) {
-                    user.setRoles(Set.of(roleRepository.findByName(UserRole.ADMIN)
-                            .orElseThrow(() -> new RuntimeException("ADMIN role not found"))));
+                    user.setRole(roleRepository.findByName(UserRole.ADMIN)
+                            .orElseThrow(() -> new RuntimeException("ADMIN role not found")));
                 } else {
-                    user.setRoles(Set.of(roleRepository.findByName(UserRole.CUSTOMER)
-                            .orElseThrow(() -> new RuntimeException("CUSTOMER role not found"))));
+                    user.setRole(roleRepository.findByName(UserRole.CUSTOMER)
+                            .orElseThrow(() -> new RuntimeException("CUSTOMER role not found")));
                 }
                 userRepository.save(user);
                 result.add(user);

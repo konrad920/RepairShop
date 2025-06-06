@@ -2,6 +2,8 @@ package edu.wsiiz.repairshop.communication.ui.contact;
 
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import edu.wsiiz.repairshop.auth.security.Secured;
+import edu.wsiiz.repairshop.auth.domain.user.UserRole;
 import edu.wsiiz.repairshop.communication.application.ContactService;
 import edu.wsiiz.repairshop.communication.domain.contact.Contact;
 import edu.wsiiz.repairshop.communication.domain.contact.ContactRepository;
@@ -9,6 +11,7 @@ import edu.wsiiz.repairshop.foundation.ui.component.MessageDialog;
 import edu.wsiiz.repairshop.foundation.ui.view.BaseForm;
 import edu.wsiiz.repairshop.foundation.ui.view.ListView;
 import edu.wsiiz.repairshop.foundation.ui.view.Mode;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.function.TriFunction;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Sort;
 
 @PageTitle("Kontakty z klientem")
 @Route("contact-list")
+@Secured(roles = {UserRole.EMPLOYEE,UserRole.ADMIN})
 public class ContactListView extends ListView<Contact> {
 
   final ContactRepository contactRepository;

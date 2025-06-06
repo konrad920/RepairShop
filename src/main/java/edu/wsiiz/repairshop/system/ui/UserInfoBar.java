@@ -25,13 +25,13 @@ public class UserInfoBar extends HorizontalLayout {
 
         if (user != null) {
             Span username = new Span("Użytkownik: " + user.getUsername());
-            Span role = new Span("Rola: " + user.getFirstRole());
+            Span role = new Span("Rola: " + user.getRole().getName());
 
             Button logoutButton = new Button("Wyloguj", e -> {
                 auditService.log(user.getUsername(), "WYLOGOWANIE");
                 CurrentUser.logout();
                 UI.getCurrent().navigate("login");
-                UI.getCurrent().getPage().reload();
+                UI.getCurrent().getPage().executeJs("setTimeout(() => window.location.reload(), 50)");
             });
 
             add(username, role, logoutButton);

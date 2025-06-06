@@ -25,19 +25,17 @@ public class User {
   @Column(nullable = false)
   String password;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  private Set<Role> roles;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinTable(
+          name = "application_user_role",
+          joinColumns = @JoinColumn(name = "user_id"),
+          inverseJoinColumns = @JoinColumn(name = "role_id")
+  )
+  private Role role;
 
-  public User(String username,String password,Set<Role> roles) {
+  public User(String username,String password,Role role) {
       this.username = username;
       this.password = password;
-      this.roles = (roles != null) ? roles : new HashSet<>();
+      this.role = role;
   }
-
-    public UserRole getFirstRole() {
-        return roles != null && !roles.isEmpty()
-                ? roles.iterator().next().getName()
-                : null;
-    }
-
 }
