@@ -19,9 +19,9 @@ import java.util.List;
 
 public class EmployeeFilters extends Filters<Employee> {
 
-  static final String POSITIONS = "positions";
+  static final String POSITION = "position";
 
-  ComboBox<Positions> position = new ComboBox<>(i18n(POSITIONS));
+  ComboBox<Positions> position = new ComboBox<>(i18n(POSITION));
 
   public EmployeeFilters(Runnable onSearch) {
     super(onSearch);
@@ -55,7 +55,7 @@ public class EmployeeFilters extends Filters<Employee> {
 
     val stat = position.getValue();
     if (stat != null) {
-      predicates.add(cb.in(root.get(POSITIONS)).value(stat));
+      predicates.add(cb.in(root.get(POSITION)).value(stat));
     }
 
     return cb.and(predicates.toArray(new Predicate[0]));
