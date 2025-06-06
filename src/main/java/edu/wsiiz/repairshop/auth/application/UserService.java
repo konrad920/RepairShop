@@ -1,7 +1,6 @@
 package edu.wsiiz.repairshop.auth.application;
 
-import edu.wsiiz.repairshop.auth.domain.user.User;
-import edu.wsiiz.repairshop.auth.domain.user.UserRepository;
+import edu.wsiiz.repairshop.auth.domain.user.*;
 import edu.wsiiz.repairshop.communication.domain.contact.Contact;
 import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     final UserRepository repository;
+    final RoleRepository roleRepository;
 
     public User get(Long id) {
         return repository.findById(id).orElse(null);
@@ -27,6 +27,12 @@ public class UserService {
     }
 
     public User findByUsername(String username) {
-        return null;
-    };
+        return repository.findByUsername(username).orElse(null);
+    }
+
+    public Role findOrCreateRole(UserRole roleName) {
+        return roleRepository.findByName(roleName)
+                .orElseGet(() -> roleRepository.save(new Role(roleName)));
+    }
+
 }

@@ -33,4 +33,11 @@ public class User {
       this.password = password;
       this.roles = (roles != null) ? roles : new HashSet<>();
   }
+
+    public UserRole getFirstRole() {
+        return roles != null && !roles.isEmpty()
+                ? roles.iterator().next().getName()
+                : null;
+    }
+
 }
