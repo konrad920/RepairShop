@@ -1,0 +1,60 @@
+package edu.wsiiz.repairshop.communication.ui.contact;
+
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import edu.wsiiz.repairshop.communication.domain.contact.Contact;
+import edu.wsiiz.repairshop.communication.domain.contact.ContactStatus;
+import edu.wsiiz.repairshop.foundation.ui.view.ListView.Filters;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.val;
+
+public class ContactFilters extends Filters<Contact> {
+
+  static final String STATUS = "status";
+
+  ComboBox<ContactStatus> status = new ComboBox<>(i18n(STATUS));
+
+  public ContactFilters(Runnable onSearch) {
+    super(onSearch);
+    setupFilters();
+  }
+
+  @Override
+  protected void setupFilters() {
+
+    status.setItems(ContactStatus.values());
+    status.setItemLabelGenerator(this::i18n);
+
+    HorizontalLayout filtersLayout = new HorizontalLayout(status);
+    filtersLayout.setWidthFull();
+
+    getContent().add(filtersLayout);
+  }
+
+  @Override
+  protected void onReset() {
+
+    status.clear();
+
+    triggerSearch();
+  }
+
+  @Override
+  public Predicate toPredicate(Root<Contact> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+    List<Predicate> predicates = new ArrayList<>();
+
+    val stat = status.getValue();
+    if (stat != null) {
+      predicates.add(cb.in(root.get(STATUS)).value(stat));
+    }
+
+    return cb.and(predicates.toArray(new Predicate[0]));
+  }
+
+}
