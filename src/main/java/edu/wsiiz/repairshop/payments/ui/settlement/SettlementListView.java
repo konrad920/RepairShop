@@ -53,6 +53,8 @@ public class SettlementListView extends ListView<Settlement> {
                 .setHeader(i18n("id"))
                 .setSortable(true);
 
+
+
         grid.addColumn(Settlement::getPaymentDate)
                 .setHeader(i18n("paymentDate"))
                 .setSortable(true);
