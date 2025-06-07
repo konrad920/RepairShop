@@ -5,7 +5,6 @@ public enum PaymentMethod {
     CASH,
     CARD,
     BANK_TRANSFER,
-    BLIK,
-    NATURE
+    BLIK
 }
 

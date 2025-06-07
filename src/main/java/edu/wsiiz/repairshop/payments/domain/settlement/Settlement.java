@@ -30,5 +30,9 @@ public class Settlement {
     @OneToMany
     private List<Invoice> invoices = new ArrayList<>();
 
+    @Embedded
+    private Reminder reminder;
+
+
 }
 

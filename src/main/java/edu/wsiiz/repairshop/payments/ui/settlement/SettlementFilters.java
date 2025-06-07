@@ -1,74 +1,76 @@
 package edu.wsiiz.repairshop.payments.ui.settlement;
 
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import edu.wsiiz.repairshop.foundation.ui.view.ListView.Filters;
 import edu.wsiiz.repairshop.payments.domain.settlement.PaymentMethod;
-import io.netty.util.internal.shaded.org.jctools.queues.MessagePassingQueue;
+import edu.wsiiz.repairshop.payments.domain.settlement.Settlement;
 
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
-public class SettlementFilters  extends Composite<HorizontalLayout> {
+public class SettlementFilters extends Filters<Settlement> {
 
-    private final TextField invoiceNumberField = new TextField("Invoice Number");
-    private final DatePicker fromDate = new DatePicker("From");
-    private final DatePicker toDate = new DatePicker("To");
-    private final ComboBox<PaymentMethod> paymentMethodBox = new ComboBox<>("Payment Method");
+    private final DatePicker fromDate = new DatePicker("From Payment Date");
+    private final DatePicker toDate = new DatePicker("To Payment Date");
+    private final ComboBox<PaymentMethod> paymentMethodCombo = new ComboBox<>("Payment Method");
 
     private final Button applyButton = new Button("Apply");
     private final Button clearButton = new Button("Clear");
 
-    private MessagePassingQueue.Consumer<FilterValues> listener;
+    private Consumer<SettlementFilterValues> listener;
 
-    public SettlementFilters() {
-        invoiceNumberField.setPlaceholder("e.g. INV-2024-01");
-        fromDate.setPlaceholder("Start date");
-        toDate.setPlaceholder("End date");
-        paymentMethodBox.setItems(PaymentMethod.values());
-        paymentMethodBox.setClearButtonVisible(true);
+    public SettlementFilters(Runnable onSearch) {
+        super(onSearch);
+
+        paymentMethodCombo.setItems(PaymentMethod.values());
+        paymentMethodCombo.setClearButtonVisible(true);
 
         applyButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         clearButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-        applyButton.addClickListener(e -> fireEvent());
+        applyButton.addClickListener(e -> fireFilterEvent());
         clearButton.addClickListener(e -> clearFilters());
 
-        getContent().add(invoiceNumberField, fromDate, toDate, paymentMethodBox, applyButton, clearButton);
+        HorizontalLayout layout = new HorizontalLayout(fromDate, toDate, paymentMethodCombo, applyButton, clearButton);
+        getContent().add(layout);
     }
 
-    public void setFilterListener(MessagePassingQueue.Consumer<FilterValues> listener) {
+    public void setFilterListener(Consumer<SettlementFilterValues> listener) {
         this.listener = listener;
     }
 
-    private void fireEvent() {
+    private void fireFilterEvent() {
         if (listener != null) {
-            listener.accept(new FilterValues(
-                    invoiceNumberField.getValue(),
+            listener.accept(new SettlementFilterValues(
                     fromDate.getValue(),
                     toDate.getValue(),
-                    paymentMethodBox.getValue()
+                    paymentMethodCombo.getValue()
             ));
         }
     }
 
     private void clearFilters() {
-        invoiceNumberField.clear();
         fromDate.clear();
         toDate.clear();
-        paymentMethodBox.clear();
-        fireEvent();
+        paymentMethodCombo.clear();
+        fireFilterEvent();
     }
 
-    public record FilterValues(
-            String invoiceNumber,
-            LocalDate from,
-            LocalDate to,
+    @Override
+    protected void setupFilters() {}
+
+    @Override
+    protected void onReset() {}
+
+    public record SettlementFilterValues(
+            LocalDate fromPaymentDate,
+            LocalDate toPaymentDate,
             PaymentMethod paymentMethod
     ) {}
 }
-
-
