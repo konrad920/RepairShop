@@ -13,12 +13,12 @@ import java.util.List;
 
 public class CustomerFilters extends Filters<Customer> {
 
-    TextField fullName = new TextField(i18n("Imię i nazwisko"));
-    //  TextField address = new TextField(i18n("Adres"));
-    TextField pesel = new TextField(i18n("PESEL"));
-    TextField regon = new TextField(i18n("REGON"));
-    TextField vehicleRegistrationNumber = new TextField(i18n("Numer rejestracyjny pojazdu"));
-    Checkbox status = new Checkbox(i18n("Aktywny"), true);
+    TextField fullName = new TextField(i18n("fullName"));
+    //  TextField address = new TextField(i18n("address"));
+    TextField pesel = new TextField(i18n("pesel"));
+    TextField regon = new TextField(i18n("regon"));
+    TextField vehicleRegistrationNumber = new TextField(i18n("vehicleRegistrationNumber"));
+    Checkbox status = new Checkbox(i18n("status"), true);
 
     public CustomerFilters(Runnable onSearch) {
         super(onSearch);

@@ -2,6 +2,7 @@ package edu.wsiiz.repairshop.customers.domain.customer;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
@@ -30,8 +31,10 @@ public class Customer {
   private String companyName;
   private String vehicleRegistrationNumber;
   private String phoneNumber;
-  private boolean isActive = true;
   private CustomerType customerType;
+
+  @ColumnDefault("true")
+  final private boolean isActive = true;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "customer_id")
