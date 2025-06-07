@@ -52,7 +52,7 @@ public class MainLayout extends AppLayout implements I18nAware {
 
     val menuItems = menuItemsProvider.getMenuItems();
 
-    for (MenuItemInfo menuItem : menuItems) {
+    for (ListItem menuItem : menuItems) {
       list.add(menuItem);
     }
 

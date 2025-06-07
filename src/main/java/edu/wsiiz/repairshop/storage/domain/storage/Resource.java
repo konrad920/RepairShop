@@ -3,6 +3,7 @@ package edu.wsiiz.repairshop.storage.domain.storage;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Date;
 
@@ -30,16 +31,15 @@ public class Resource {
     private double netPrice;
 
     @Temporal(TemporalType.DATE)
-    private Date productionDate;
+    private LocalDate productionDate;
 
     @Temporal(TemporalType.DATE)
-    private Date expirationDate;
+    private LocalDate expirationDate;
 
     private int quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_part_id", nullable = false)
-    private DeliveryPart deliveryPart;
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
+    private List<DeliveryPart> deliveryParts;
 
     @ManyToOne
     @JoinColumn(name = "storage_id", nullable = false)

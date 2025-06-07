@@ -1,11 +1,16 @@
 package edu.wsiiz.repairshop.storage.domain.storage;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import java.util.Date;
+import lombok.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "deliveryId")
 public class Delivery {
     @Id
@@ -13,7 +18,7 @@ public class Delivery {
     private Long deliveryId;
 
     @Temporal(TemporalType.DATE)
-    private Date deliveryDate;
+    private LocalDate deliveryDate;
 
     @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeliveryPart> deliveryParts;

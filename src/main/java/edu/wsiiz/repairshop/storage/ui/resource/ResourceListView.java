@@ -8,8 +8,6 @@ import edu.wsiiz.repairshop.foundation.ui.view.ListView;
 import edu.wsiiz.repairshop.foundation.ui.view.Mode;
 import edu.wsiiz.repairshop.storage.application.ResourceService;
 import edu.wsiiz.repairshop.storage.domain.storage.*;
-import edu.wsiiz.repairshop.storage.ui.storage.StorageFilters;
-import edu.wsiiz.repairshop.storage.ui.storage.StorageForm;
 import org.apache.commons.lang3.function.TriFunction;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -17,9 +15,6 @@ import org.springframework.data.domain.Sort;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-/**
- * Widok GUI dla zarządzania magazynami.
- */
 @PageTitle("Zasoby")
 @Route("resource")
 public class ResourceListView extends ListView<Resource> {
@@ -35,8 +30,8 @@ public class ResourceListView extends ListView<Resource> {
         this.manufacturerRepository = manufacturerRepository;
         this.storageRepository = storageRepository;
 
-        setFilters(new ResourceFilters(this::refreshGrid));
-//        setTitleText(i18n("title"));
+        setFilters(new ResourceFilters(this::refreshGrid, manufacturerRepository.findAll(), storageRepository.findAll()));
+        setTitleText(i18n("title"));
         setupLayout();
     }
 
@@ -49,7 +44,13 @@ public class ResourceListView extends ListView<Resource> {
     protected void setupGrid() {
         grid.addColumn("resourceId", Resource::getResourceId).setHeader("ID Zasobu");
         grid.addColumn("name", Resource::getName).setHeader("Nazwa");
+        grid.addColumn("unit", resource -> resource.getUnit().name()).setHeader("Jednostka").setSortable(true);
         grid.addColumn("manufacturer", resource -> Optional.ofNullable(resource.getManufacturer()).map(Manufacturer::getName).orElse(null)).setHeader("Producent");
+        grid.addColumn("netPrice", Resource::getNetPrice).setHeader("Cena netto");
+        grid.addColumn("productionDate", Resource::getProductionDate).setHeader("Data produkcji");
+        grid.addColumn("expirationDate", Resource::getExpirationDate).setHeader("Data ważności");
+        grid.addColumn("quantity", Resource::getQuantity).setHeader("Ilość");
+        grid.addColumn("storage", resource -> Optional.ofNullable(resource.getStorage()).map(Storage::getAddress).orElse(null)).setHeader("Magazyn");
         grid.setItems(query -> resourceRepository.findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("name"))).stream());
     }
 

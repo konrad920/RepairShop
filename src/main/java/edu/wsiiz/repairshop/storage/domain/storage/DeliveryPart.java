@@ -1,11 +1,15 @@
 package edu.wsiiz.repairshop.storage.domain.storage;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+
 import java.util.List;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "deliveryPartId")
 public class DeliveryPart {
 
@@ -19,6 +23,7 @@ public class DeliveryPart {
 
     private int quantity;
 
-    @OneToMany(mappedBy = "deliveryPart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Resource> resources;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "resource_id", nullable = false)
+    private Resource resource;
 }
