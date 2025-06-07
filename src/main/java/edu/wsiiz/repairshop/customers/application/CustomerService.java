@@ -21,4 +21,9 @@ public class CustomerService {
     public void remove(Customer customer) {
         repository.delete(customer);
     }
+
+    public void deactivate(Customer customer) {
+        repository.deactivateCustomer(customer.getId());
+    }
+
 }

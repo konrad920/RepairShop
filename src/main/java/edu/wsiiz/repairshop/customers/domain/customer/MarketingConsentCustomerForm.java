@@ -57,16 +57,16 @@
 //    // Ponieważ MarketingConsentCustomer jest zarządzane kaskadowo przez Customer,
 //    // nie wywołujemy tu bezpośrednio save() serwisu w onSave().
 //    // Zmiany są obsługiwane w CustomerForm i zapisywane razem z Customer.
-//    @Override
-//    protected void onSave(ClickEvent<Button> event) {
-//        try {
-//            binder.writeBean(model);
-//            showNotifation(i18n(BaseForm.class, "writeSuccess"));
-//            if (afterSave != null) {
-//                afterSave.accept(model);
-//            }
-//        } catch (ValidationException e) {
-//            showNotifation(i18n(BaseForm.class, "validationErrors"));
-//        }
-//    }
+////    @Override
+////    protected void onSave(ClickEvent<Button> event) {
+////        try {
+////            binder.writeBean(model);
+////            showNotifation(i18n(BaseForm.class, "writeSuccess"));
+////            if (afterSave != null) {
+////                afterSave.accept(model);
+////            }
+////        } catch (ValidationException e) {
+////            showNotifation(i18n(BaseForm.class, "validationErrors"));
+////        }
+////    }
 //}

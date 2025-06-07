@@ -14,17 +14,22 @@ import edu.wsiiz.repairshop.communication.domain.contact.Contact;
 import edu.wsiiz.repairshop.communication.domain.contact.ContactChannel;
 import edu.wsiiz.repairshop.communication.domain.contact.ContactStatus;
 import edu.wsiiz.repairshop.customers.application.CustomerService;
-import edu.wsiiz.repairshop.customers.domain.customer.Customer;
-import edu.wsiiz.repairshop.customers.domain.customer.CustomerType;
-import edu.wsiiz.repairshop.customers.domain.customer.MarketingConsentCustomer;
+import edu.wsiiz.repairshop.customers.domain.customer.*;
 import edu.wsiiz.repairshop.foundation.ui.view.BaseForm;
 import edu.wsiiz.repairshop.foundation.ui.view.Mode;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+
+
+
 public class CustomerForm extends BaseForm<Customer> {
+
+    private final MarketingConsentRepository marketingConsentRepository;
 
     private VerticalLayout authorizedPeopleSection = new VerticalLayout();
 
@@ -41,18 +46,20 @@ public class CustomerForm extends BaseForm<Customer> {
     Checkbox klientBiznesowy2 = new Checkbox(i18n("klientBiznesowy"));
 //  private final Map<Zgoda, Checkbox> zgodyCheckboxy = new EnumMap<>(Zgoda.class);
 //private final Map<String, Checkbox> zgodyCheckboxy = new EnumMap<>;
+    private final Map<MarketingConsent, Checkbox> zgodyCheckboxy = new HashMap<>();
 
 
 
-    public CustomerForm(Mode mode, Customer item, CustomerService service, Consumer<Customer> afterSave) {
+    public CustomerForm(Mode mode, Customer item, CustomerService service, Consumer<Customer> afterSave,
+                        MarketingConsentRepository marketingConsentRepository) {
         super(mode,
-                () -> Customer.builder()
-//                    .type(CustomerType.RETAIL)
-                        .build(),
+                () -> Customer.builder().build(),
                 () -> service.get(item.getId()),
                 service::save,
                 afterSave);
+        this.marketingConsentRepository = marketingConsentRepository;
     }
+
 
     @Override
     public void setupFields() {
@@ -61,9 +68,14 @@ public class CustomerForm extends BaseForm<Customer> {
 //      zgodyCheckboxy.put(zgoda, checkbox);
 //      add(checkbox);
 
-
         klientBiznesowy.setLabel("Zgoda1");
         klientBiznesowy2.setLabel("Zgoda2");
+//        List<MarketingConsent> consents = marketingConsentRepository.findAll();
+//        for (MarketingConsent consent : consents) {
+//            Checkbox checkbox = new Checkbox(consent.getDescription());
+//            layout.add(checkbox);
+//        }
+
         layout.add(firstName, lastName, pesel, regon, companyName,phoneNumber, vehicleRegistrationNumber, klientBiznesowy, klientBiznesowy2);
     }
 

@@ -1,6 +1,7 @@
 package edu.wsiiz.repairshop.customers.ui.customer;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -14,6 +15,7 @@ import edu.wsiiz.repairshop.customers.application.CustomerService;
 import edu.wsiiz.repairshop.customers.domain.customer.Address;
 import edu.wsiiz.repairshop.customers.domain.customer.Customer;
 import edu.wsiiz.repairshop.customers.domain.customer.CustomerRepository;
+import edu.wsiiz.repairshop.customers.domain.customer.MarketingConsentRepository;
 import edu.wsiiz.repairshop.foundation.ui.component.MessageDialog;
 import edu.wsiiz.repairshop.foundation.ui.view.BaseForm;
 import edu.wsiiz.repairshop.foundation.ui.view.ListView;
@@ -32,28 +34,31 @@ public class CustomerListView extends ListView<Customer> {
 
   final CustomerRepository customerRepository;
   final CustomerService customerService;
+  private final MarketingConsentRepository marketingConsentRepository;
 
   public CustomerListView(
           CustomerRepository customerRepository,
-          CustomerService customerService) {
+          CustomerService customerService,MarketingConsentRepository marketingConsentRepository) {
     this.customerRepository = customerRepository;
     this.customerService = customerService;
     setFilters(new CustomerFilters(this::refreshGrid));
     setTitleText(i18n("title"));
     setupLayout();
+    this.marketingConsentRepository = marketingConsentRepository;
   }
 
   @Override
   protected void addAdditionalActions(HorizontalLayout actions) {
-    Button addBtn = new Button(LineAwesomeIcon.PLUS_SOLID.create());
-    addBtn.addClickListener(e -> onAdd());
-    actions.add( addBtn);
+    Button addBtn = new Button(LineAwesomeIcon.USER_SLASH_SOLID
+            .create());
+    addBtn.addClickListener(e -> runOnSelected(this::onDeactivate));
+    actions.add(addBtn);
   }
 
   @Override
   protected TriFunction<Customer, Mode, Consumer<Customer>, BaseForm<Customer>> detailsFormSupplier() {
     return (id, mode, afterSave) ->
-            new CustomerForm(mode, id, customerService, afterSave);
+            new CustomerForm(mode, id, customerService, afterSave, marketingConsentRepository);
   }
 
   @Override
@@ -91,6 +96,19 @@ public class CustomerListView extends ListView<Customer> {
             })
             .withYesButton(() -> {
               customerService.remove(item);
+              refreshGrid();
+            })
+            .show();
+  }
+
+  protected void onDeactivate(Customer item) {
+    MessageDialog.question()
+            .withTitle(i18n("confirmation"))
+            .withMessage(i18n("onDeactivate"))
+            .withNoButton(() -> {
+            })
+            .withYesButton(() -> {
+              customerService.deactivate(item);
               refreshGrid();
             })
             .show();
