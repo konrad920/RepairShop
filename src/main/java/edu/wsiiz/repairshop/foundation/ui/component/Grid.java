@@ -13,8 +13,8 @@ public class Grid<T> extends com.vaadin.flow.component.grid.Grid<T> implements I
 
   public Column<T> addColumn(String columnId, ValueProvider<T, ?> valueProvider) {
     return this.addColumn(valueProvider)
-        .setHeader(i18n(ownerClass, columnId))
-        .setAutoWidth(true);
+            .setHeader(i18n(ownerClass, columnId))
+            .setAutoWidth(true);
   }
 
 }
