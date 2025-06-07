@@ -16,8 +16,8 @@ import java.util.List;
 
 public class ResourceFilters extends ListView.Filters<Resource> {
 
-    static final String MANUFACTURER_ID = "manufacturer_id";
-    static final String STORAGE_ID = "storage_id";
+    static final String MANUFACTURER = "manufacturer";
+    static final String STORAGE = "storage";
 
     ComboBox<Manufacturer> manufactureField = new ComboBox<Manufacturer>("Producent");
     ComboBox<Storage> storageField = new ComboBox<Storage>("Magazyn");
@@ -59,10 +59,10 @@ public class ResourceFilters extends ListView.Filters<Resource> {
         Manufacturer manufacturerValue = manufactureField.getValue();
         Storage storageValue = storageField.getValue();
         if (manufacturerValue != null) {
-            predicates.add(cb.equal(cb.lower(root.get(MANUFACTURER_ID)), manufacturerValue.getManufacturerId()));
+            predicates.add(cb.equal(root.get(MANUFACTURER), manufacturerValue));
         }
         if (storageValue != null) {
-            predicates.add(cb.equal(cb.lower(root.get(STORAGE_ID)), storageValue.getStorageId()));
+            predicates.add(cb.equal(root.get(STORAGE), storageValue));
         }
 
         return cb.and(predicates.toArray(new Predicate[0]));

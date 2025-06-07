@@ -2,6 +2,7 @@ package edu.wsiiz.repairshop.storage.application;
 
 import edu.wsiiz.repairshop.storage.domain.storage.*;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +50,13 @@ public class DeliveryService {
     deliveryRepository.deleteById(deliveryId);
   }
 
+  @Transactional
   public DeliveryPart save(DeliveryPart deliveryPart) {
-    Resource resource = deliveryPart.getResource();
+    Resource resource = resourceRepository.findById(deliveryPart.getResource().getResourceId())
+            .orElseThrow(() -> new EntityNotFoundException("Resource not found"));
     resource.setQuantity(resource.getQuantity() + deliveryPart.getQuantity());
-
     resourceRepository.save(resource);
+    deliveryPart.setResource(resource);
 
     return deliveryPartRepository.save(deliveryPart);
   }

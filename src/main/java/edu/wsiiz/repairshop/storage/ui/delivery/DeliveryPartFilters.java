@@ -21,9 +21,11 @@ public class DeliveryPartFilters extends ListView.Filters<DeliveryPart> {
 
     NumberField quantityFromField = new NumberField(i18n("quantityFrom"));
     NumberField quantityToField = new NumberField(i18n("quantityTo"));
+    private Delivery delivery;
 
-    public DeliveryPartFilters(Runnable onSearch) {
+    public DeliveryPartFilters(Runnable onSearch, Delivery delivery) {
         super(onSearch);
+        this.delivery = delivery;
         setupFilters();
     }
 
@@ -61,6 +63,8 @@ public class DeliveryPartFilters extends ListView.Filters<DeliveryPart> {
         if (quantityToValue != null) {
             predicates.add(cb.lt(root.get(NAME), quantityToValue));
         }
+
+        predicates.add(cb.equal(root.get("delivery"), delivery));
 
         return cb.and(predicates.toArray(new Predicate[0]));
     }

@@ -21,6 +21,12 @@ public class DeliveryPartForm extends BaseForm<DeliveryPart> {
                 service::save,
                 afterSave);
 
+        binder.forField(quantityField)
+                .withConverter(
+                        Double::intValue,
+                        Integer::doubleValue,
+                        "Wprowadź poprawną liczbę całkowitą")
+                .bind(DeliveryPart::getQuantity, DeliveryPart::setQuantity);
         binder.forField(resourceComboBox)
                 .bind(DeliveryPart::getResource, DeliveryPart::setResource);
 

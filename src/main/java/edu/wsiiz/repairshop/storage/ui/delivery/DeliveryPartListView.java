@@ -25,15 +25,15 @@ public class DeliveryPartListView extends ListView<DeliveryPart> implements HasU
     public DeliveryPartListView(DeliveryService deliveryService, DeliveryPartRepository deliveryPartRepository) {
         this.deliveryService = deliveryService;
         this.deliveryPartRepository = deliveryPartRepository;
-
-        setFilters(new DeliveryPartFilters(this::refreshGrid));
-        setupLayout();
     }
 
     @Override
     public void setParameter(BeforeEvent event, Long deliveryId) {
         delivery = this.deliveryService.getDelivery(deliveryId);
         setTitleText("Liczba części dostawy dla ID dostawy: " + delivery.getDeliveryId());
+
+        setFilters(new DeliveryPartFilters(this::refreshGrid, delivery));
+        setupLayout();
     }
 
     @Override
