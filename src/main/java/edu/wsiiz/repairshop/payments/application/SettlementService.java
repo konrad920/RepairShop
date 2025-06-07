@@ -34,5 +34,8 @@ public class SettlementService {
     public Settlement save(Settlement settlement) {
         return repository.save(settlement);
     }
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }
 
