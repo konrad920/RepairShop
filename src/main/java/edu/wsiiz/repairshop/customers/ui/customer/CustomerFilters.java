@@ -27,6 +27,7 @@ public class CustomerFilters extends Filters<Customer> {
 
     @Override
     protected void setupFilters() {
+        status.getStyle().set("margin-top", "auto");
         HorizontalLayout filtersLayout = new HorizontalLayout(fullName, pesel, regon, vehicleRegistrationNumber, status);
         filtersLayout.setWidthFull();
 
