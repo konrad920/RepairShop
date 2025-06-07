@@ -65,7 +65,7 @@ public class DeliveryListView extends ListView<Delivery> {
 
     @Override
     protected void setupGrid() {
-        grid.addColumn("deliveryId", Delivery::getDeliveryId).setHeader("ID dostawt");
+        grid.addColumn("deliveryId", Delivery::getDeliveryId).setHeader("ID dostawy");
         grid.addColumn("deliveryDate", Delivery::getDeliveryDate).setHeader("Data dostawy");
         grid.setItems(query -> deliveryRepository.findAll(getFilters(), PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("deliveryDate"))).stream());
     }
