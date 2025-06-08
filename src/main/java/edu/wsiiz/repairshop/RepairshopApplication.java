@@ -13,4 +13,5 @@ public class RepairshopApplication implements AppShellConfigurator {
     SpringApplication.run(RepairshopApplication.class, args);
   }
 
+	
 }
