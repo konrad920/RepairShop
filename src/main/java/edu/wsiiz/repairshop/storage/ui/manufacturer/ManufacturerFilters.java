@@ -25,7 +25,7 @@ public class ManufacturerFilters extends ListView.Filters<Manufacturer> {
 
     @Override
     protected void setupFilters() {
-        nameField.setPlaceholder("Wpisz nazwę magazynu...");
+        nameField.setPlaceholder("Wpisz nazwę producenta...");
         nameField.setWidthFull();
 
         HorizontalLayout filtersLayout = new HorizontalLayout(nameField);
