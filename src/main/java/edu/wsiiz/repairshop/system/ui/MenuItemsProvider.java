@@ -3,6 +3,12 @@ package edu.wsiiz.repairshop.system.ui;
 import com.vaadin.flow.component.html.ListItem;
 import edu.wsiiz.repairshop.communication.ui.contact.ContactListView;
 
+import edu.wsiiz.repairshop.employee.ui.employee.EmployeeListView;
+import edu.wsiiz.repairshop.customers.ui.customer.CustomerListView;
+import edu.wsiiz.repairshop.foundation.ui.menu.MenuItemInfo;
+import edu.wsiiz.repairshop.payments.ui.invoice.InvoiceListView;
+import edu.wsiiz.repairshop.payments.ui.settlement.SettlementListView;
+import edu.wsiiz.repairshop.vehicles.ui.vehicle.VehicleListView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +29,11 @@ public class MenuItemsProvider {
         val items = new ArrayList<ListItem>();
         items.add(new MenuItemInfo("Witamy", LineAwesomeIcon.HOME_SOLID.create(), WelcomeView.class));
         items.add(new MenuItemInfo("Kontakty z klientami", LineAwesomeIcon.HEADSET_SOLID.create(), ContactListView.class));
+      items.add(new MenuItemInfo("Kartoteka pojazdów", LineAwesomeIcon.CAR_SOLID.create(), VehicleListView.class));
+      items.add(new MenuItemInfo("Faktury", LineAwesomeIcon.BOOKMARK.create(), InvoiceListView.class));
+      items.add(new MenuItemInfo("Rozliczenia", LineAwesomeIcon.MONEY_BILL_SOLID.create(), SettlementListView.class));
+      items.add(new MenuItemInfo("Pracownicy", LineAwesomeIcon.USER_SOLID.create(), EmployeeListView.class));
+      items.add(new MenuItemInfo("Klienci", LineAwesomeIcon.HEADSET_SOLID.create(), CustomerListView.class));
 
         val subItems = List.of(
             new MenuItemInfo("Producenci", LineAwesomeIcon.COLUMNS_SOLID.create(), ManufacturerListView.class),
