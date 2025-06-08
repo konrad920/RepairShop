@@ -2,6 +2,7 @@ package edu.wsiiz.repairshop.system.ui;
 
 import edu.wsiiz.repairshop.communication.ui.contact.ContactListView;
 import edu.wsiiz.repairshop.employee.ui.employee.EmployeeListView;
+import edu.wsiiz.repairshop.customers.ui.customer.CustomerListView;
 import edu.wsiiz.repairshop.foundation.ui.menu.MenuItemInfo;
 import edu.wsiiz.repairshop.payments.ui.invoice.InvoiceListView;
 import edu.wsiiz.repairshop.payments.ui.settlement.SettlementListView;
@@ -23,6 +24,7 @@ public class MenuItemsProvider {
     items.add(new MenuItemInfo("Faktury", LineAwesomeIcon.BOOKMARK.create(), InvoiceListView.class));
     items.add(new MenuItemInfo("Rozliczenia", LineAwesomeIcon.MONEY_BILL_SOLID.create(), SettlementListView.class));
     items.add(new MenuItemInfo("Pracownicy", LineAwesomeIcon.USER_SOLID.create(), EmployeeListView.class));
+    items.add(new MenuItemInfo("Klienci", LineAwesomeIcon.HEADSET_SOLID.create(), CustomerListView.class));
     return items;
   }
 }
