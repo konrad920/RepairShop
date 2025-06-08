@@ -17,7 +17,7 @@ public class VehicleController {
     }
 
     @GetMapping
-    public List<Vehicle> getAll(@RequestParam(required = false) String vin) {
+    public List<Vehicle> getAll(@RequestParam(value = "vin", required = false) String vin) {
         if (vin != null && !vin.isBlank()) {
             return service.searchByVin(vin);
         }
