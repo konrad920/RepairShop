@@ -41,17 +41,11 @@ public class CustomerForm extends BaseForm<Customer> {
     TextField companyName = new TextField(i18n("companyName"));
     TextField phoneNumber = new TextField(i18n("phoneNumber"));
     TextField vehicleRegistrationNumber = new TextField(i18n("vehicleRegistrationNumber"));
-    ComboBox<MarketingConsentCustomer> marketingConsentCustomerComboBox = new ComboBox<>(i18n("marketingConsentCustomerComboBox"));
-    Checkbox klientBiznesowy = new Checkbox(i18n("klientBiznesowy"));
-    Checkbox klientBiznesowy2 = new Checkbox(i18n("klientBiznesowy"));
-//  private final Map<Zgoda, Checkbox> zgodyCheckboxy = new EnumMap<>(Zgoda.class);
-//private final Map<String, Checkbox> zgodyCheckboxy = new EnumMap<>;
     private final Map<MarketingConsent, Checkbox> zgodyCheckboxy = new HashMap<>();
+    private Checkbox checkbox;
 
 
-
-    public CustomerForm(Mode mode, Customer item, CustomerService service, Consumer<Customer> afterSave,
-                        MarketingConsentRepository marketingConsentRepository) {
+    public CustomerForm(Mode mode, Customer item, CustomerService service, Consumer<Customer> afterSave, MarketingConsentRepository marketingConsentRepository) {
         super(mode,
                 () -> Customer.builder().build(),
                 () -> service.get(item.getId()),
@@ -63,20 +57,13 @@ public class CustomerForm extends BaseForm<Customer> {
 
     @Override
     public void setupFields() {
-//    for (Zgoda zgoda : Zgoda.values()) {
-//      Checkbox checkbox = new Checkbox(getLabelForZgoda(zgoda));
-//      zgodyCheckboxy.put(zgoda, checkbox);
-//      add(checkbox);
-
-        klientBiznesowy.setLabel("Zgoda1");
-        klientBiznesowy2.setLabel("Zgoda2");
-//        List<MarketingConsent> consents = marketingConsentRepository.findAll();
-//        for (MarketingConsent consent : consents) {
-//            Checkbox checkbox = new Checkbox(consent.getDescription());
-//            layout.add(checkbox);
-//        }
-
-        layout.add(firstName, lastName, pesel, regon, companyName,phoneNumber, vehicleRegistrationNumber, klientBiznesowy, klientBiznesowy2);
+        layout.add(firstName, lastName, pesel, regon, companyName,phoneNumber, vehicleRegistrationNumber);
+        List<MarketingConsent> consents = marketingConsentRepository.findAll();
+        for (MarketingConsent consent : consents) {
+            checkbox = new Checkbox(consent.getDescription());
+            zgodyCheckboxy.put(consent, checkbox);
+            layout.add(checkbox);
+        }
     }
 
 }

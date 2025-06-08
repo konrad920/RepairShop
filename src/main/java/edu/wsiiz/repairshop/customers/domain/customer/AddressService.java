@@ -3,6 +3,9 @@ package edu.wsiiz.repairshop.customers.domain.customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AddressService {
@@ -19,5 +22,9 @@ public class AddressService {
 
     public void remove(Address address) {
         repository.delete(address);
+    }
+
+    public List<Address> findByCustomerId(Long customerId) {
+        return repository.findByCustomerId(customerId);
     }
 }

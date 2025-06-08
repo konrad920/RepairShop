@@ -26,4 +26,7 @@ public class MarketingConsentCustomer {
     private MarketingConsent marketingConsent; // Powiązanie ze słownikiem zgód
     private LocalDate consentDate; // Data udzielenia zgody
     private boolean granted; // Czy zgoda została udzielona (true/false)
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }
