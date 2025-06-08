@@ -3,9 +3,11 @@ package edu.wsiiz.repairshop.system.ui;
 import edu.wsiiz.repairshop.communication.ui.contact.ContactListView;
 import edu.wsiiz.repairshop.employee.ui.employee.EmployeeListView;
 import edu.wsiiz.repairshop.foundation.ui.menu.MenuItemInfo;
+import edu.wsiiz.repairshop.payments.ui.invoice.InvoiceListView;
+import edu.wsiiz.repairshop.payments.ui.settlement.SettlementListView;
+import edu.wsiiz.repairshop.vehicles.ui.vehicle.VehicleListView;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.val;
 import org.springframework.stereotype.Component;
 import org.vaadin.lineawesome.LineAwesomeIcon;
